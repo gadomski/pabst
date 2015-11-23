@@ -14,6 +14,11 @@ pub mod point;
 pub mod source;
 pub mod sink;
 
+pub use error::Error;
+pub use point::Point;
+pub use source::Source;
+pub use sink::Sink;
+
 use std::result;
 
 pub type Result<T> = result::Result<T, error::Error>;
