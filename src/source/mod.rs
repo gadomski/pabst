@@ -69,4 +69,9 @@ pub trait Source {
 pub trait FileSource: Source {
     /// Open this file source for the given path with the given options.
     fn open_file_source<P>(path: P, options: HashMap<String, String>) -> Result<Box<FileSource>> where Self: Sized, P: AsRef<Path> + AsRef<OsStr>;
+
+    /// Returns a mutable reference to this object as a Source.
+    fn as_mut_source(&mut self) -> &mut Source where Self: Sized {
+        self
+    }
 }

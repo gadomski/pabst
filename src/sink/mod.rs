@@ -42,6 +42,11 @@ pub trait FileSink<P: AsRef<Path>>: Sink {
     /// Open a new file sink.
     fn open_file_sink(path: P, options: HashMap<String, String>) -> Result<Box<FileSink<P>>> where Self: Sized;
 
+    /// Returns this `FileSink` as a mutable reference to a Sink.
+    fn as_mut_sink(&mut self) -> &mut Sink where Self: Sized {
+        self
+    }
+
     /// Close the file sink.
     ///
     /// This usually is where you do any finalization, like writing points out to disk.

@@ -50,7 +50,7 @@ impl FileSource for rivlib::Stream {
     // TODO this panics if the path isn't valid
     fn open_file_source<P: AsRef<Path> + AsRef<OsStr>>(path: P,
                                                        options: HashMap<String, String>)
-                                                       -> Result<Box<FileSource>> {
+                                                       -> Result<Box<Source>> {
         let mut sync_to_pps = true;
         let path = OsStr::new(&path).to_str().unwrap();
         for (key, val) in options {
