@@ -8,7 +8,7 @@ use std::u16;
 use Result;
 
 /// A point.
-pub trait Point {
+pub trait Point where Self: Sized {
     /// The x dimension of a point. All points must have these.
     fn x(&self) -> f64;
 
@@ -139,6 +139,34 @@ pub trait Point {
     fn high_channel(&self) -> Option<bool> {
         None
     }
+
+    /// Converts this point into a `pabst::GenericPoint`.
+    fn into_generic(self) -> GenericPoint {
+        GenericPoint {
+            x: self.x(),
+            y: self.y(),
+            z: self.z(),
+            intensity: self.intensity(),
+            return_number: self.return_number(),
+            number_of_returns: self.number_of_returns(),
+            scan_direction: self.scan_direction(),
+            edge_of_flight_line: self.edge_of_flight_line(),
+            classification: self.classification(),
+            synthetic: self.synthetic(),
+            key_point: self.key_point(),
+            withheld: self.withheld(),
+            scan_angle: self.scan_angle(),
+            point_source_id: self.point_source_id(),
+            user_data: self.user_data(),
+            gps_time: self.gps_time(),
+            range: self.range(),
+            width: self.width(),
+            rg_index: self.rg_index(),
+            facet_number: self.facet_number(),
+            target_type: self.target_type(),
+            high_channel: self.high_channel(),
+        }
+    }
 }
 
 /// Implemented by structs that can be created from a `Point`.
@@ -214,3 +242,124 @@ impl Intensity {
         (u16::MAX as f64 * (self.value - self.min) / (self.max - self.min)) as u16
     }
 }
+
+/// A concrete realization of a `Point`.
+///
+/// This can be used by intermediate processing pipelines that need to modify the fields of a
+/// `Point`. Direct pass-through setups do *not* need to use generic points -- use the `FromPoint`
+/// trait instead.
+#[derive(Clone, Copy, Debug)]
+pub struct GenericPoint {
+    x: f64,
+    y: f64,
+    z: f64,
+    intensity: Intensity,
+    return_number: Option<usize>,
+    number_of_returns: Option<usize>,
+    scan_direction: ScanDirection,
+    edge_of_flight_line: bool,
+    classification: u8,
+    synthetic: bool,
+    key_point: bool,
+    withheld: bool,
+    scan_angle: Option<f64>,
+    point_source_id: Option<u16>,
+    user_data: Option<u8>,
+    gps_time: Option<f64>,
+    range: Option<f64>,
+    width: Option<f64>,
+    rg_index: Option<f64>,
+    facet_number: Option<u8>,
+    target_type: Option<u8>,
+    high_channel: Option<bool>,
+}
+
+impl Point for GenericPoint {
+    fn x(&self) -> f64 {
+        self.x
+    }
+    fn y(&self) -> f64 {
+        self.y
+    }
+    fn z(&self) -> f64 {
+        self.z
+    }
+    fn intensity(&self) -> Intensity {
+        self.intensity
+    }
+    fn return_number(&self) -> Option<usize> {
+        self.return_number
+    }
+    fn number_of_returns(&self) -> Option<usize> {
+        self.number_of_returns
+    }
+    fn scan_direction(&self) -> ScanDirection {
+        self.scan_direction
+    }
+    fn edge_of_flight_line(&self) -> bool {
+        self.edge_of_flight_line
+    }
+    fn classification(&self) -> u8 {
+        self.classification
+    }
+    fn synthetic(&self) -> bool {
+        self.synthetic
+    }
+    fn key_point(&self) -> bool {
+        self.key_point
+    }
+    fn withheld(&self) -> bool {
+        self.withheld
+    }
+    fn scan_angle(&self) -> Option<f64> {
+        self.scan_angle
+    }
+    fn point_source_id(&self) -> Option<u16> {
+        self.point_source_id
+    }
+    fn user_data(&self) -> Option<u8> {
+        self.user_data
+    }
+    fn gps_time(&self) -> Option<f64> {
+        self.gps_time
+    }
+    fn range(&self) -> Option<f64> {
+        self.range
+    }
+    fn width(&self) -> Option<f64> {
+        self.width
+    }
+    fn rg_index(&self) -> Option<f64> {
+        self.rg_index
+    }
+    fn facet_number(&self) -> Option<u8> {
+        self.facet_number
+    }
+    fn target_type(&self) -> Option<u8> {
+        self.target_type
+    }
+    fn high_channel(&self) -> Option<bool> {
+        self.high_channel
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use las;
+
+    use source::Source;
+
+    #[test]
+    fn generic_point() {
+        let mut source = las::Stream::from_path("data/1.0_0.las").unwrap();
+        let las_points = source.source(1).unwrap().unwrap();
+        let points: Vec<_> = las_points.into_iter().map(|p| p.into_generic()).collect();
+        assert_eq!(1, points.len());
+        let ref point = points[0];
+        assert_eq!(470692.44, point.x);
+    }
+}
+
