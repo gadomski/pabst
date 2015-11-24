@@ -21,8 +21,8 @@ pub mod sink;
 
 pub use error::Error;
 pub use point::Point;
-pub use source::Source;
-pub use sink::Sink;
+pub use source::{open_file_source, FileSource, Source};
+pub use sink::{open_file_sink, FileSink, Sink};
 
 use std::result;
 
