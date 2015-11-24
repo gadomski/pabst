@@ -50,12 +50,6 @@ impl Point for rivlib::Point {
     }
 }
 
-impl From<rivlib::Error> for Error {
-    fn from(err: rivlib::Error) -> Error {
-        Error::Upstream(Box::new(err))
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use rivlib;

@@ -5,7 +5,6 @@ use std::io::Read;
 use sdc;
 
 use Result;
-use error::Error;
 use point::{Intensity, Point};
 use source::Source;
 
@@ -26,12 +25,6 @@ impl<R: Read> Source for sdc::Reader<R> {
             }
         }
         Ok(Some(points))
-    }
-}
-
-impl From<sdc::Error> for Error {
-    fn from(err: sdc::Error) -> Error {
-        Error::Upstream(Box::new(err))
     }
 }
 

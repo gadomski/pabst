@@ -62,12 +62,6 @@ impl Point for sdf::convert::Point {
     }
 }
 
-impl From<sdf::Error> for Error {
-    fn from(err: sdf::Error) -> Error {
-        Error::Upstream(Box::new(err))
-    }
-}
-
 #[cfg(test)]
 mod tests {
 

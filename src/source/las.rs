@@ -5,7 +5,6 @@ use std::io::{Read, Seek};
 use las;
 
 use Result;
-use error::Error;
 use point::{Intensity, Point, ScanDirection};
 use source::Source;
 
@@ -27,12 +26,6 @@ impl<R: Read + Seek> Source for las::Stream<R> {
             }
         }
         Ok(Some(points))
-    }
-}
-
-impl From<las::Error> for Error {
-    fn from(err: las::Error) -> Error {
-        Error::Upstream(Box::new(err))
     }
 }
 
