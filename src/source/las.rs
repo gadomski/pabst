@@ -1,12 +1,15 @@
 //! Source las points.
 
+use std::collections::HashMap;
 use std::io::{Read, Seek};
+use std::path::Path;
 
 use las;
 
 use Result;
+use error::Error;
 use point::{Intensity, Point, ScanDirection};
-use source::Source;
+use source::{FileSource, Source};
 
 impl<R: Read + Seek> Source for las::Stream<R> {
     fn source(&mut self, want: usize) -> Result<Option<Vec<Point>>> {
@@ -24,6 +27,18 @@ impl<R: Read + Seek> Source for las::Stream<R> {
             }
         }
         Ok(Some(points))
+    }
+}
+
+impl<R: Read + Seek> FileSource for las::Stream<R> {
+    fn open_file_source<P: AsRef<Path>>(path: P,
+                                        options: HashMap<String, String>)
+                                        -> Result<Box<FileSource>> {
+        if !options.is_empty() {
+            return Err(Error::InvalidOption("las source does not support any options at this time".to_string()));
+        }
+        let source = try!(las::Stream::from_path(path));
+        Ok(Box::new(source))
     }
 }
 

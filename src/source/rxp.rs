@@ -2,12 +2,16 @@
 //!
 //! `rxp` is a data layout format from Riegl.
 
+use std::collections::HashMap;
+use std::ffi::OsStr;
+use std::path::Path;
+
 use rivlib;
 
 use error::Error;
 use point::{Intensity, Point};
 use Result;
-use source::Source;
+use source::{FileSource, Source};
 
 impl Source for rivlib::Stream {
     fn source(&mut self, want: usize) -> Result<Option<Vec<Point>>> {
@@ -42,11 +46,30 @@ impl From<rivlib::Point> for Point {
     }
 }
 
+impl FileSource for rivlib::Stream {
+    // TODO this panics if the path isn't valid
+    fn open_file_source<P: AsRef<Path> + AsRef<OsStr>>(path: P,
+                                                       options: HashMap<String, String>)
+                                                       -> Result<Box<FileSource>> {
+        let mut sync_to_pps = true;
+        let path = OsStr::new(&path).to_str().unwrap();
+        for (key, val) in options {
+            match (*key).as_ref() {
+                "sync-to-pps" => sync_to_pps = try!(val.parse()),
+                _ => return Err(Error::InvalidOption(val)),
+            }
+        }
+        Ok(Box::new(try!(rivlib::Stream::open(path, sync_to_pps))))
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
+
     use rivlib;
 
-    use source::Source;
+    use source::{open_file_source, Source};
 
     fn xyz_from_first_point<S: Source>(source: &mut S) {
         let points = source.source(1).unwrap().unwrap();
@@ -67,5 +90,14 @@ mod tests {
     fn xyz() {
         let ref mut source = rivlib::Stream::open("data/130501_232206_cut.rxp", true).unwrap();
         xyz_from_first_point(source);
+    }
+
+    #[test]
+    fn file_source() {
+        let mut options = HashMap::new();
+        let _ = options.insert("sync-to-pps".to_string(), "true".to_string());
+        let mut source = open_file_source("data/130501_232206_cut.rxp", options).unwrap();
+        let points = source.source_to_end(200000).unwrap();
+        assert_eq!(177208, points.len());
     }
 }

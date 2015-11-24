@@ -1,14 +1,18 @@
 //! Sink points into a las file.
 
+use std::collections::HashMap;
+use std::path::Path;
+
 use las;
 
 use Result;
+use error::Error;
 use point::{Point, ScanDirection};
-use sink::Sink;
+use sink::{FileSink, Sink};
 
-impl Sink for las::File {
+impl<P: AsRef<Path>> Sink for las::Writer<P> {
     fn sink(&mut self, point: Point) -> Result<()> {
-        self.add_point(try!(from_point(point)));
+        self.write_point(try!(from_point(point)));
         Ok(())
     }
 }
@@ -42,27 +46,76 @@ fn from_point(point: Point) -> Result<las::Point> {
     })
 }
 
+impl<P: 'static + AsRef<Path>> FileSink<P> for las::Writer<P> {
+    fn open_file_sink(path: P, options: HashMap<String, String>) -> Result<Box<FileSink<P>>> {
+        let mut writer = las::Writer::from_path(path);
+        for (key, val) in options.iter() {
+            match key.to_lowercase().as_ref() {
+                "scale-factors" | "scaling" => {
+                    let factors: Vec<_> = val.split(|c| c == ' ' || c == ',').collect();
+                    if factors.len() != 3 {
+                        return Err(Error::InvalidOption(format!("Incorrect number of scale \
+                                                                 factors provided, wanted 3 \
+                                                                 but got {}",
+                                                                factors.len())));
+                    }
+                    writer = writer.scale_factors(try!(factors[0].parse()),
+                                                  try!(factors[1].parse()),
+                                                  try!(factors[2].parse()));
+                }
+                _ => {
+                    return Err(Error::InvalidOption(format!("The las sink does not know how to \
+                                                             handle this option: {}",
+                                                            key)))
+                }
+            }
+        }
+
+        Ok(Box::new(writer))
+    }
+
+    fn close_file_sink(&mut self) -> Result<()> {
+        self.close().map_err(|e| Error::from(e))
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
     use std::fs::remove_file;
 
     use las;
 
-    use sink::Sink;
-    use source::Source;
+    use sink::{open_file_sink, FileSink, Sink};
+    use source::{open_file_source, Source};
 
     #[test]
     fn read_write_las() {
         let mut source = las::Stream::from_path("data/1.0_0.las").unwrap();
-        let mut sink = las::File::new();
+        let mut sink = las::Writer::from_path("read_write_las.las");
         for point in source.source_to_end(100).unwrap() {
             sink.sink(point).unwrap()
         }
-        sink.to_path("temp.las").unwrap();
+        sink.close().unwrap();
 
-        let mut source = las::Stream::from_path("temp.las").unwrap();
+        let mut source = las::Stream::from_path("read_write_las.las").unwrap();
         let points = source.source_to_end(100).unwrap();
         assert_eq!(1, points.len());
-        remove_file("temp.las").unwrap();
+        remove_file("read_write_las.las").unwrap();
+    }
+
+    #[test]
+    fn source_and_sink() {
+        let mut source = open_file_source("data/1.0_0.las", HashMap::new()).unwrap();
+        let mut sink = open_file_sink("source_and_sink.las", HashMap::new()).unwrap();
+        for point in source.source_to_end(100).unwrap() {
+            sink.sink(point).unwrap();
+        }
+        sink.close_file_sink().unwrap();
+
+        let mut source = las::Stream::from_path("source_and_sink.las").unwrap();
+        let points = source.source_to_end(100).unwrap();
+        assert_eq!(1, points.len());
+        remove_file("source_and_sink.las").unwrap();
     }
 }

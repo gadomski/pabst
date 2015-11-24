@@ -9,8 +9,38 @@ pub mod sdf;
 #[cfg(feature = "rxp")]
 pub mod rxp;
 
+use std::collections::HashMap;
+use std::ffi::OsStr;
+use std::fs::File;
+use std::io::BufReader;
+use std::path::Path;
+
+use las::Stream as LasStream;
+#[cfg(feature = "rxp")]
+use rivlib::Stream as RxpStream;
+
 use Result;
+use error::Error;
 use point::Point;
+
+/// Opens a file source with the given options.
+///
+/// # Examples
+///
+/// ```
+/// use std::collections::HashMap;
+/// use pabst::source::open_file_source;
+/// let source = open_file_source("data/1.0_0.las", HashMap::new()).unwrap();
+/// ```
+pub fn open_file_source<P>(path: P, options: HashMap<String, String>) -> Result<Box<FileSource>>
+where P: AsRef<Path> + AsRef<OsStr> {
+    match Path::new(&path).extension().and_then(|e| e.to_str()) {
+        Some("las") => LasStream::<BufReader<File>>::open_file_source(path, options),
+        #[cfg(feature = "rxp")]
+            Some("rxp") => RxpStream::open_file_source(path, options),
+            _ => Err(Error::UndefinedSource),
+    }
+}
 
 /// A point source.
 pub trait Source {
@@ -33,4 +63,10 @@ pub trait Source {
             }
         }
     }
+}
+
+/// A point source that can be opened from a path.
+pub trait FileSource: Source {
+    /// Open this file source for the given path with the given options.
+    fn open_file_source<P>(path: P, options: HashMap<String, String>) -> Result<Box<FileSource>> where Self: Sized, P: AsRef<Path> + AsRef<OsStr>;
 }
