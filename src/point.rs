@@ -3,6 +3,8 @@
 //! This is is a catchall trait that has a bunch of optional fields. This lets sources choose what
 //! values to fill in, and sinks choose what values to pay attention to.
 
+use Result;
+
 /// A point.
 pub trait Point {
     fn x(&self) -> f64;
@@ -59,10 +61,10 @@ pub trait Point {
     fn high_channel(&self) -> Option<bool> {
         None
     }
+}
 
-    fn set_x(&mut self, x: f64);
-    fn set_y(&mut self, y: f64);
-    fn set_z(&mut self, z: f64);
+pub trait FromPoint {
+    fn from_point<P: Point>(point: &P) -> Result<Self> where Self: Sized;
 }
 
 pub enum ScanDirection {

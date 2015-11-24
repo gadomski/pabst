@@ -2,13 +2,20 @@
 
 use las;
 
-use point::{Point, ScanDirection};
+use point::{FromPoint, Point, ScanDirection};
 use Result;
 use sink::Sink;
 
 impl Sink for las::File {
     fn sink<P: Point>(&mut self, point: &P) -> Result<()> {
-        self.add_point(las::Point {
+        self.add_point(try!(las::Point::from_point(point)));
+        Ok(())
+    }
+}
+
+impl FromPoint for las::Point {
+    fn from_point<P: Point>(point: &P) -> Result<las::Point> {
+        Ok(las::Point {
             x: point.x(),
             y: point.y(),
             z: point.z(),
@@ -33,8 +40,7 @@ impl Sink for las::File {
             green: None,
             blue: None,
             extra_bytes: None,
-        });
-        Ok(())
+        })
     }
 }
 

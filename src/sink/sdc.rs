@@ -6,12 +6,19 @@ use sdc;
 
 use Result;
 use error::Error;
-use point::Point;
+use point::{FromPoint, Point};
 use sink::Sink;
 
 impl<W: Write> Sink for sdc::Writer<W> {
     fn sink<P: Point>(&mut self, point: &P) -> Result<()> {
-        try!(self.write_point(&sdc::Point {
+        try!(self.write_point(&try!(sdc::Point::from_point(point))));
+        Ok(())
+    }
+}
+
+impl FromPoint for sdc::Point {
+    fn from_point<P: Point>(point: &P) -> Result<sdc::Point> {
+        Ok(sdc::Point {
             time: try!(point.gps_time().ok_or(Error::MissingDimension("time".to_string()))),
             range: point.range().unwrap_or_else(|| (point.x().powi(2) + point.y().powi(2) + point.z().powi(2)).sqrt()) as f32,
             theta: try!(point.scan_angle()
@@ -27,8 +34,7 @@ impl<W: Write> Sink for sdc::Writer<W> {
             target_type: try!(sdc::TargetType::from_u8(point.target_type().unwrap_or(3) as u8)),
             facet_number: point.facet_number().unwrap_or(0),
             high_channel: point.high_channel().unwrap_or(false),
-        }));
-        Ok(())
+        })
     }
 }
 

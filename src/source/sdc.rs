@@ -57,15 +57,6 @@ impl Point for sdc::Point {
     fn gps_time(&self) -> Option<f64> {
         Some(self.time)
     }
-    fn set_x(&mut self, x: f64) {
-        self.x = x as f32;
-    }
-    fn set_y(&mut self, y: f64) {
-        self.y = y as f32;
-    }
-    fn set_z(&mut self, z: f64) {
-        self.z = z as f32;
-    }
 }
 
 #[cfg(test)]

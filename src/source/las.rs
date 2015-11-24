@@ -88,14 +88,4 @@ impl Point for las::Point {
     fn user_data(&self) -> Option<u8> {
         Some(self.user_data)
     }
-
-    fn set_x(&mut self, x: f64) {
-        self.x = x;
-    }
-    fn set_y(&mut self, y: f64) {
-        self.y = y;
-    }
-    fn set_z(&mut self, z: f64) {
-        self.z = z;
-    }
 }
