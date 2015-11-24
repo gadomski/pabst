@@ -9,12 +9,11 @@ use point::{Intensity, Point};
 use source::Source;
 
 impl<R: Read> Source for sdc::Reader<R> {
-    type Point = sdc::Point;
-    fn source(&mut self, want: usize) -> Result<Option<Vec<Self::Point>>> {
+    fn source(&mut self, want: usize) -> Result<Option<Vec<Point>>> {
         let mut points = Vec::with_capacity(want);
         for _ in 0..want {
             match try!(self.next_point()) {
-                Some(point) => points.push(point),
+                Some(point) => points.push(Point::from(point)),
                 None => {
                     if points.is_empty() {
                         return Ok(None);
@@ -28,27 +27,18 @@ impl<R: Read> Source for sdc::Reader<R> {
     }
 }
 
-impl Point for sdc::Point {
-    fn x(&self) -> f64 {
-        self.x as f64
-    }
-    fn y(&self) -> f64 {
-        self.y as f64
-    }
-    fn z(&self) -> f64 {
-        self.z as f64
-    }
-    fn intensity(&self) -> Intensity {
-        Intensity::from_u16(self.amplitude)
-    }
-    fn return_number(&self) -> Option<usize> {
-        Some(self.target as usize)
-    }
-    fn number_of_returns(&self) -> Option<usize> {
-        Some(self.num_target as usize)
-    }
-    fn gps_time(&self) -> Option<f64> {
-        Some(self.time)
+impl From<sdc::Point> for Point {
+    fn from(point: sdc::Point) -> Point {
+        Point {
+            x: point.x as f64,
+            y: point.y as f64,
+            z: point.z as f64,
+            intensity: Intensity::from_u16(point.amplitude),
+            return_number: Some(point.target as usize),
+            number_of_returns: Some(point.num_target as usize),
+            gps_time: Some(point.time),
+            ..Default::default()
+        }
     }
 }
 

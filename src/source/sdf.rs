@@ -14,22 +14,24 @@ use point::{Intensity, Point};
 use source::Source;
 
 impl Source for sdf::File {
-    type Point = sdf::convert::Point;
-    fn source(&mut self, want: usize) -> Result<Option<Vec<Self::Point>>> {
+    fn source(&mut self, want: usize) -> Result<Option<Vec<Point>>> {
         let mut points = Vec::with_capacity(want);
         let ref file_info = try!(self.info());
         try!(self.reindex());
         loop {
             match self.read() {
                 Ok(ref record) => {
-                    points.append(&mut try!(sdf::convert::discretize(record, file_info)));
+                    points.append(&mut try!(sdf::convert::discretize(record, file_info))
+                                           .into_iter()
+                                           .map(|p| Point::from(p))
+                                           .collect());
                     if points.len() > want {
                         break;
                     }
                 }
                 Err(sdf::Error::EndOfFile(_)) => {
                     break;
-                },
+                }
                 Err(err) => return Err(Error::from(err)),
             }
         }
@@ -41,24 +43,19 @@ impl Source for sdf::File {
     }
 }
 
-impl Point for sdf::convert::Point {
-    fn x(&self) -> f64 { self.x as f64 }
-    fn y(&self) -> f64 { self.y as f64 }
-    fn z(&self) -> f64 { self.z as f64 }
-    fn intensity(&self) -> Intensity {
-        Intensity::from_u16(self.peak.amplitude)
-    }
-    fn return_number(&self) -> Option<usize> {
-        Some(self.target as usize)
-    }
-    fn number_of_returns(&self) -> Option<usize> {
-        Some(self.num_target as usize)
-    }
-    fn facet_number(&self) -> Option<u8> {
-        Some(self.facet as u8)
-    }
-    fn high_channel(&self) -> Option<bool> {
-        Some(self.high_channel)
+impl From<sdf::convert::Point> for Point {
+    fn from(point: sdf::convert::Point) -> Point {
+        Point {
+            x: point.x as f64,
+            y: point.y as f64,
+            z: point.z as f64,
+            intensity: Intensity::from_u16(point.peak.amplitude),
+            return_number: Some(point.target as usize),
+            number_of_returns: Some(point.num_target as usize),
+            facet_number: Some(point.facet as u8),
+            high_channel: Some(point.high_channel),
+            ..Default::default()
+        }
     }
 }
 
