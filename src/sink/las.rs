@@ -63,6 +63,7 @@ impl<P: 'static + AsRef<Path>> FileSink<P> for las::Writer<P> {
                                                   try!(factors[1].parse()),
                                                   try!(factors[2].parse()));
                 }
+                "auto-offset" | "auto-offsets" => writer = writer.auto_offsets(try!(val.parse())),
                 _ => {
                     return Err(Error::InvalidOption(format!("The las sink does not know how to \
                                                              handle this option: {}",
