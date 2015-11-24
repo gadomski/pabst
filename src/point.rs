@@ -29,16 +29,34 @@ pub trait Point {
     fn withheld(&self) -> bool {
         false
     }
-    fn scan_angle(&self) -> f64 {
-        0.0
+    fn scan_angle(&self) -> Option<f64> {
+        None
     }
-    fn user_data(&self) -> u8 {
-        0
+    fn point_source_id(&self) -> Option<u16> {
+        None
     }
-    fn point_source_id(&self) -> u16 {
-        0
+    fn user_data(&self) -> Option<u8> {
+        None
     }
     fn gps_time(&self) -> Option<f64> {
+        None
+    }
+    fn range(&self) -> Option<f64> {
+        None
+    }
+    fn width(&self) -> Option<f64> {
+        None
+    }
+    fn rg_index(&self) -> Option<f64> {
+        None
+    }
+    fn facet_number(&self) -> Option<u8> {
+        None
+    }
+    fn target_type(&self) -> Option<u8> {
+        None
+    }
+    fn high_channel(&self) -> Option<bool> {
         None
     }
 

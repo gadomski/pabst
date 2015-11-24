@@ -24,9 +24,9 @@ impl Sink for las::File {
             synthetic: point.synthetic(),
             key_point: point.key_point(),
             withheld: point.withheld(),
-            scan_angle_rank: point.scan_angle() as i8,
-            user_data: point.user_data(),
-            point_source_id: point.point_source_id(),
+            scan_angle_rank: point.scan_angle().unwrap_or(0.0) as i8,
+            user_data: point.user_data().unwrap_or(0),
+            point_source_id: point.point_source_id().unwrap_or(0),
             gps_time: point.gps_time(),
         // FIXME these should be properties too
             red: None,

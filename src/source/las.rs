@@ -6,7 +6,7 @@ use las;
 
 use Result;
 use error::Error;
-use point::Point;
+use point::{Point, ScanDirection};
 use source::Source;
 
 impl<R: Read + Seek> Source for las::Stream<R> {
@@ -57,6 +57,36 @@ impl Point for las::Point {
     }
     fn gps_time(&self) -> Option<f64> {
         self.gps_time
+    }
+    fn scan_direction(&self) -> ScanDirection {
+        match self.scan_direction {
+            las::point::ScanDirection::Forward => ScanDirection::Forward,
+            las::point::ScanDirection::Backward => ScanDirection::Backward,
+        }
+    }
+    fn edge_of_flight_line(&self) -> bool {
+        self.edge_of_flight_line
+    }
+    fn classification(&self) -> u8 {
+        self.classification.as_u8()
+    }
+    fn synthetic(&self) -> bool {
+        self.synthetic
+    }
+    fn key_point(&self) -> bool {
+        self.key_point
+    }
+    fn withheld(&self) -> bool {
+        self.withheld
+    }
+    fn scan_angle(&self) -> Option<f64> {
+        Some(self.scan_angle_rank as f64)
+    }
+    fn point_source_id(&self) -> Option<u16> {
+        Some(self.point_source_id)
+    }
+    fn user_data(&self) -> Option<u8> {
+        Some(self.user_data)
     }
 
     fn set_x(&mut self, x: f64) {

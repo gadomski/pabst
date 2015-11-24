@@ -3,6 +3,7 @@
 //! These don't necessarily have to be file format readers, but they usually are.
 
 pub mod las;
+pub mod sdc;
 #[cfg(feature = "rxp")]
 pub mod rxp;
 

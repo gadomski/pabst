@@ -1,6 +1,7 @@
 //! Point sinks.
 
 pub mod las;
+pub mod sdc;
 
 use point::Point;
 use Result;

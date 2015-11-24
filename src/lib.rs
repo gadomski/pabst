@@ -8,6 +8,7 @@
 extern crate las;
 #[cfg(feature = "rxp")]
 extern crate rivlib;
+extern crate sdc;
 
 pub mod error;
 pub mod point;
