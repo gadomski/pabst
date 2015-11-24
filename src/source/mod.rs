@@ -4,6 +4,8 @@
 
 pub mod las;
 pub mod sdc;
+#[cfg(feature = "sdf-convert")]
+pub mod sdf;
 #[cfg(feature = "rxp")]
 pub mod rxp;
 

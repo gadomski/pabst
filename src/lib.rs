@@ -11,6 +11,8 @@ extern crate las;
 #[cfg(feature = "rxp")]
 extern crate rivlib;
 extern crate sdc;
+#[cfg(feature = "sdf-convert")]
+extern crate sdf;
 
 pub mod error;
 pub mod point;
