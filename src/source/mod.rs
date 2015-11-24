@@ -32,13 +32,14 @@ use point::Point;
 /// use pabst::source::open_file_source;
 /// let source = open_file_source("data/1.0_0.las", HashMap::new()).unwrap();
 /// ```
-pub fn open_file_source<P>(path: P, options: HashMap<String, String>) -> Result<Box<FileSource>>
-where P: AsRef<Path> + AsRef<OsStr> {
+pub fn open_file_source<P>(path: P, options: HashMap<String, String>) -> Result<Box<Source>>
+    where P: AsRef<Path> + AsRef<OsStr>
+{
     match Path::new(&path).extension().and_then(|e| e.to_str()) {
         Some("las") => LasStream::<BufReader<File>>::open_file_source(path, options),
         #[cfg(feature = "rxp")]
             Some("rxp") => RxpStream::open_file_source(path, options),
-            _ => Err(Error::UndefinedSource),
+        _ => Err(Error::UndefinedSource),
     }
 }
 
@@ -66,12 +67,9 @@ pub trait Source {
 }
 
 /// A point source that can be opened from a path.
-pub trait FileSource: Source {
+pub trait FileSource {
     /// Open this file source for the given path with the given options.
-    fn open_file_source<P>(path: P, options: HashMap<String, String>) -> Result<Box<FileSource>> where Self: Sized, P: AsRef<Path> + AsRef<OsStr>;
-
-    /// Returns a mutable reference to this object as a Source.
-    fn as_mut_source(&mut self) -> &mut Source where Self: Sized {
-        self
-    }
+    fn open_file_source<P>(path: P, options: HashMap<String, String>) -> Result<Box<Source>>
+        where Self: Sized,
+              P: AsRef<Path> + AsRef<OsStr>;
 }

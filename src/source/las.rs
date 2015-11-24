@@ -33,9 +33,11 @@ impl<R: Read + Seek> Source for las::Stream<R> {
 impl<R: Read + Seek> FileSource for las::Stream<R> {
     fn open_file_source<P: AsRef<Path>>(path: P,
                                         options: HashMap<String, String>)
-                                        -> Result<Box<FileSource>> {
+                                        -> Result<Box<Source>> {
         if !options.is_empty() {
-            return Err(Error::InvalidOption("las source does not support any options at this time".to_string()));
+            return Err(Error::InvalidOption("las source does not support any options at this \
+                                             time"
+                                                .to_string()));
         }
         let source = try!(las::Stream::from_path(path));
         Ok(Box::new(source))

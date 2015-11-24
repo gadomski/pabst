@@ -22,7 +22,9 @@ use point::Point;
 /// use pabst::sink::open_file_sink;
 /// let sink = open_file_sink("temp.las", HashMap::new()).unwrap();
 /// ```
-pub fn open_file_sink<P>(path: P, options: HashMap<String, String>) -> Result<Box<FileSink<P>>> where P: 'static + AsRef<Path> + AsRef<OsStr> {
+pub fn open_file_sink<P>(path: P, options: HashMap<String, String>) -> Result<Box<Sink>>
+    where P: 'static + AsRef<Path> + AsRef<OsStr>
+{
     match Path::new(&path).extension().and_then(|e| e.to_str()) {
         Some("las") => LasWriter::open_file_sink(path, options),
         _ => Err(Error::UndefinedSink),
@@ -35,20 +37,13 @@ pub fn open_file_sink<P>(path: P, options: HashMap<String, String>) -> Result<Bo
 pub trait Sink {
     /// Sink a single point into this sink.
     fn sink(&mut self, point: Point) -> Result<()>;
+
+    /// Close a sink, probably writing its points out or something.
+    fn close_sink(&mut self) -> Result<()>;
 }
 
 /// A sink that puts points into a path.
-pub trait FileSink<P: AsRef<Path>>: Sink {
+pub trait FileSink<P: AsRef<Path>> {
     /// Open a new file sink.
-    fn open_file_sink(path: P, options: HashMap<String, String>) -> Result<Box<FileSink<P>>> where Self: Sized;
-
-    /// Returns this `FileSink` as a mutable reference to a Sink.
-    fn as_mut_sink(&mut self) -> &mut Sink where Self: Sized {
-        self
-    }
-
-    /// Close the file sink.
-    ///
-    /// This usually is where you do any finalization, like writing points out to disk.
-    fn close_file_sink(&mut self) -> Result<()>;
+    fn open_file_sink(path: P, options: HashMap<String, String>) -> Result<Box<Sink>> where Self: Sized;
 }

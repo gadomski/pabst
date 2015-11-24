@@ -15,6 +15,10 @@ impl<P: AsRef<Path>> Sink for las::Writer<P> {
         self.write_point(try!(from_point(point)));
         Ok(())
     }
+
+    fn close_sink(&mut self) -> Result<()> {
+        self.close().map_err(|e| Error::from(e))
+    }
 }
 
 fn from_point(point: Point) -> Result<las::Point> {
@@ -47,7 +51,7 @@ fn from_point(point: Point) -> Result<las::Point> {
 }
 
 impl<P: 'static + AsRef<Path>> FileSink<P> for las::Writer<P> {
-    fn open_file_sink(path: P, options: HashMap<String, String>) -> Result<Box<FileSink<P>>> {
+    fn open_file_sink(path: P, options: HashMap<String, String>) -> Result<Box<Sink>> {
         let mut writer = las::Writer::from_path(path);
         for (key, val) in options.iter() {
             match key.to_lowercase().as_ref() {
@@ -67,16 +71,12 @@ impl<P: 'static + AsRef<Path>> FileSink<P> for las::Writer<P> {
                 _ => {
                     return Err(Error::InvalidOption(format!("The las sink does not know how to \
                                                              handle this option: {}",
-                                                            key)))
+                                                            key)));
                 }
             }
         }
 
         Ok(Box::new(writer))
-    }
-
-    fn close_file_sink(&mut self) -> Result<()> {
-        self.close().map_err(|e| Error::from(e))
     }
 }
 
@@ -87,7 +87,7 @@ mod tests {
 
     use las;
 
-    use sink::{open_file_sink, FileSink, Sink};
+    use sink::{open_file_sink, Sink};
     use source::{open_file_source, Source};
 
     #[test]
@@ -112,7 +112,7 @@ mod tests {
         for point in source.source_to_end(100).unwrap() {
             sink.sink(point).unwrap();
         }
-        sink.close_file_sink().unwrap();
+        sink.close_sink().unwrap();
 
         let mut source = las::Stream::from_path("source_and_sink.las").unwrap();
         let points = source.source_to_end(100).unwrap();

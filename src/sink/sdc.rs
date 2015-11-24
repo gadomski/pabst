@@ -14,6 +14,10 @@ impl<W: Write> Sink for sdc::Writer<W> {
         try!(self.write_point(&try!(from_point(point))));
         Ok(())
     }
+
+    fn close_sink(&mut self) -> Result<()> {
+        Ok(())
+    }
 }
 
 fn from_point(point: Point) -> Result<sdc::Point> {
