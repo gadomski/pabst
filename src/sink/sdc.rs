@@ -34,6 +34,9 @@ impl FromPoint for sdc::Point {
             target_type: try!(sdc::TargetType::from_u8(point.target_type().unwrap_or(3))),
             facet_number: point.facet_number().unwrap_or(0),
             high_channel: point.high_channel().unwrap_or(false),
+            class_id: Some(point.classification()),
+            rho: None,
+            reflectance: None,
         })
     }
 }
