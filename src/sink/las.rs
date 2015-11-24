@@ -19,7 +19,7 @@ impl FromPoint for las::Point {
             x: point.x(),
             y: point.y(),
             z: point.z(),
-            intensity: point.intensity() as u16,
+            intensity: point.intensity().as_u16(),
             return_number: try!(las::point::ReturnNumber::from_u8(point.return_number().unwrap_or(0) as u8)),
             number_of_returns: try!(las::point::NumberOfReturns::from_u8(point.number_of_returns().unwrap_or(0) as u8)),
             scan_direction: match point.scan_direction() {

@@ -2,12 +2,10 @@
 //!
 //! `rxp` is a data layout format from Riegl.
 
-use std::u16;
-
 use rivlib;
 
 use error::Error;
-use point::Point;
+use point::{Intensity, Point};
 use Result;
 use source::Source;
 
@@ -28,8 +26,8 @@ impl Point for rivlib::Point {
     fn z(&self) -> f64 {
         self.z as f64
     }
-    fn intensity(&self) -> u16 {
-        (u16::MAX as f32 * (self.reflectance + 50.0) / 100.0) as u16
+    fn intensity(&self) -> Intensity {
+        Intensity::new(self.reflectance as f64, -50.0, 50.0)
     }
     fn return_number(&self) -> Option<usize> {
         match self.echo_type {
@@ -49,16 +47,6 @@ impl Point for rivlib::Point {
         } else {
             None
         }
-    }
-
-    fn set_x(&mut self, x: f64) {
-        self.x = x as f32;
-    }
-    fn set_y(&mut self, y: f64) {
-        self.y = y as f32;
-    }
-    fn set_z(&mut self, z: f64) {
-        self.z = z as f32;
     }
 }
 

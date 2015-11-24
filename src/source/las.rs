@@ -6,7 +6,7 @@ use las;
 
 use Result;
 use error::Error;
-use point::{Point, ScanDirection};
+use point::{Intensity, Point, ScanDirection};
 use source::Source;
 
 impl<R: Read + Seek> Source for las::Stream<R> {
@@ -46,8 +46,8 @@ impl Point for las::Point {
     fn z(&self) -> f64 {
         self.z
     }
-    fn intensity(&self) -> u16 {
-        self.intensity
+    fn intensity(&self) -> Intensity {
+        Intensity::from_u16(self.intensity)
     }
     fn return_number(&self) -> Option<usize> {
         Some(self.return_number.as_u8() as usize)

@@ -10,7 +10,9 @@ pub mod rxp;
 use point;
 use Result;
 
+/// A point source.
 pub trait Source {
+    /// The type of point that this source produces.
     type Point: point::Point;
 
     /// Sources some points from the `Source`.

@@ -6,7 +6,7 @@ use sdc;
 
 use Result;
 use error::Error;
-use point::Point;
+use point::{Intensity, Point};
 use source::Source;
 
 impl<R: Read> Source for sdc::Reader<R> {
@@ -45,8 +45,8 @@ impl Point for sdc::Point {
     fn z(&self) -> f64 {
         self.z as f64
     }
-    fn intensity(&self) -> u16 {
-        self.amplitude
+    fn intensity(&self) -> Intensity {
+        Intensity::from_u16(self.amplitude)
     }
     fn return_number(&self) -> Option<usize> {
         Some(self.target as usize)
