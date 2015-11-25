@@ -114,7 +114,6 @@
 <span id="72">72</span>
 <span id="73">73</span>
 <span id="74">74</span>
-<span id="75">75</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Sources of points.</span>
 <span class='doccomment'>//!</span>
@@ -122,20 +121,20 @@
 
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>las</span>;
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>sdc</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;sdf-convert&quot;</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;sdf-source&quot;</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>sdf</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp&quot;</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp-source&quot;</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>rxp</span>;
 
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>collections</span>::<span class='ident'>HashMap</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>OsStr</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fs</span>::<span class='ident'>File</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>BufReader</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::<span class='ident'>Path</span>;
 
 <span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>Stream</span> <span class='kw'>as</span> <span class='ident'>LasStream</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp&quot;</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp-source&quot;</span>)]</span>
 <span class='kw'>use</span> <span class='ident'>rivlib</span>::<span class='ident'>Stream</span> <span class='kw'>as</span> <span class='ident'>RxpStream</span>;
+<span class='kw'>use</span> <span class='ident'>toml</span>;
 
 <span class='kw'>use</span> <span class='prelude-ty'>Result</span>;
 <span class='kw'>use</span> <span class='ident'>error</span>::<span class='ident'>Error</span>;
@@ -146,17 +145,16 @@
 <span class='doccomment'>/// # Examples</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// ```</span>
-<span class='doccomment'>/// use std::collections::HashMap;</span>
 <span class='doccomment'>/// use pabst::source::open_file_source;</span>
-<span class='doccomment'>/// let source = open_file_source(&quot;data/1.0_0.las&quot;, HashMap::new()).unwrap();</span>
+<span class='doccomment'>/// let source = open_file_source(&quot;data/1.0_0.las&quot;, None).unwrap();</span>
 <span class='doccomment'>/// ```</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>open_file_source</span><span class='op'>&lt;</span><span class='ident'>P</span><span class='op'>&gt;</span>(<span class='ident'>path</span>: <span class='ident'>P</span>, <span class='ident'>options</span>: <span class='ident'>HashMap</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>String</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>Source</span><span class='op'>&gt;&gt;</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>open_file_source</span><span class='op'>&lt;</span><span class='ident'>P</span><span class='op'>&gt;</span>(<span class='ident'>path</span>: <span class='ident'>P</span>, <span class='ident'>options</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>toml</span>::<span class='ident'>Table</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>Source</span><span class='op'>&gt;&gt;</span>
     <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>Path</span><span class='op'>&gt;</span> <span class='op'>+</span> <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>OsStr</span><span class='op'>&gt;</span>
 {
     <span class='kw'>match</span> <span class='ident'>Path</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='ident'>path</span>).<span class='ident'>extension</span>().<span class='ident'>and_then</span>(<span class='op'>|</span><span class='ident'>e</span><span class='op'>|</span> <span class='ident'>e</span>.<span class='ident'>to_str</span>()) {
         <span class='prelude-val'>Some</span>(<span class='string'>&quot;las&quot;</span>) <span class='op'>=&gt;</span> <span class='ident'>LasStream</span>::<span class='op'>&lt;</span><span class='ident'>BufReader</span><span class='op'>&lt;</span><span class='ident'>File</span><span class='op'>&gt;&gt;</span>::<span class='ident'>open_file_source</span>(<span class='ident'>path</span>, <span class='ident'>options</span>),
-        <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp&quot;</span>)]</span>
-            <span class='prelude-val'>Some</span>(<span class='string'>&quot;rxp&quot;</span>) <span class='op'>=&gt;</span> <span class='ident'>RxpStream</span>::<span class='ident'>open_file_source</span>(<span class='ident'>path</span>, <span class='ident'>options</span>),
+        <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp-source&quot;</span>)]</span>
+        <span class='prelude-val'>Some</span>(<span class='string'>&quot;rxp&quot;</span>) <span class='op'>=&gt;</span> <span class='ident'>RxpStream</span>::<span class='ident'>open_file_source</span>(<span class='ident'>path</span>, <span class='ident'>options</span>),
         _ <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>UndefinedSource</span>),
     }
 }
@@ -187,7 +185,7 @@
 <span class='doccomment'>/// A point source that can be opened from a path.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>FileSource</span> {
     <span class='doccomment'>/// Open this file source for the given path with the given options.</span>
-    <span class='kw'>fn</span> <span class='ident'>open_file_source</span><span class='op'>&lt;</span><span class='ident'>P</span><span class='op'>&gt;</span>(<span class='ident'>path</span>: <span class='ident'>P</span>, <span class='ident'>options</span>: <span class='ident'>HashMap</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>String</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>Source</span><span class='op'>&gt;&gt;</span>
+    <span class='kw'>fn</span> <span class='ident'>open_file_source</span><span class='op'>&lt;</span><span class='ident'>P</span><span class='op'>&gt;</span>(<span class='ident'>path</span>: <span class='ident'>P</span>, <span class='ident'>options</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>toml</span>::<span class='ident'>Table</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>Source</span><span class='op'>&gt;&gt;</span>
         <span class='kw'>where</span> <span class='kw'>Self</span>: <span class='ident'>Sized</span>,
               <span class='ident'>P</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>Path</span><span class='op'>&gt;</span> <span class='op'>+</span> <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>OsStr</span><span class='op'>&gt;</span>;
 }

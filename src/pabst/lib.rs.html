@@ -70,6 +70,7 @@
 <span id="28">28</span>
 <span id="29">29</span>
 <span id="30">30</span>
+<span id="31">31</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Point ABSTraction library in Rust.</span>
 <span class='doccomment'>//!</span>
@@ -81,11 +82,12 @@
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>deny</span>(<span class='ident'>fat_ptr_transmutes</span>, <span class='ident'>missing_copy_implementations</span>, <span class='ident'>missing_debug_implementations</span>, <span class='ident'>missing_docs</span>, <span class='ident'>trivial_casts</span>, <span class='ident'>trivial_numeric_casts</span>, <span class='ident'>unsafe_code</span>, <span class='ident'>unused_extern_crates</span>, <span class='ident'>unused_import_braces</span>, <span class='ident'>unused_qualifications</span>, <span class='ident'>unused_results</span>, <span class='ident'>variant_size_differences</span>)]</span>
 
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>las</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp&quot;</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp-source&quot;</span>)]</span>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>rivlib</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>sdc</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;sdf-convert&quot;</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;sdf-source&quot;</span>)]</span>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>sdf</span>;
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>toml</span>;
 
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>error</span>;
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>point</span>;

@@ -123,10 +123,10 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>str</span>::<span class='ident'>ParseBoolError</span>;
 
 <span class='kw'>use</span> <span class='ident'>las</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp&quot;</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp-source&quot;</span>)]</span>
 <span class='kw'>use</span> <span class='ident'>rivlib</span>;
 <span class='kw'>use</span> <span class='ident'>sdc</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;sdf-convert&quot;</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;sdf-source&quot;</span>)]</span>
 <span class='kw'>use</span> <span class='ident'>sdf</span>;
 
 <span class='doccomment'>/// Our custom error handling type.</span>
@@ -142,12 +142,12 @@
     <span class='ident'>ParseBool</span>(<span class='ident'>ParseBoolError</span>),
     <span class='doccomment'>/// A wrapper around `std::num::ParseFloatError`.</span>
     <span class='ident'>ParseFloat</span>(<span class='ident'>ParseFloatError</span>),
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp-source&quot;</span>)]</span>
     <span class='doccomment'>/// A wrapper around an rxp error.</span>
     <span class='ident'>Rxp</span>(<span class='ident'>rivlib</span>::<span class='ident'>Error</span>),
     <span class='doccomment'>/// A wrapper around an sdc error.</span>
     <span class='ident'>Sdc</span>(<span class='ident'>sdc</span>::<span class='ident'>Error</span>),
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;sdf-convert&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;sdf-source&quot;</span>)]</span>
     <span class='doccomment'>/// A wrapper around an sdf error.</span>
     <span class='ident'>Sdf</span>(<span class='ident'>sdf</span>::<span class='ident'>Error</span>),
     <span class='doccomment'>/// The type of sink could not be determined.</span>
@@ -174,7 +174,7 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp&quot;</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;rxp-source&quot;</span>)]</span>
 <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>rivlib</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Error</span> {
     <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>err</span>: <span class='ident'>rivlib</span>::<span class='ident'>Error</span>) <span class='op'>-&gt;</span> <span class='ident'>Error</span> {
         <span class='ident'>Error</span>::<span class='ident'>Rxp</span>(<span class='ident'>err</span>)
@@ -187,7 +187,7 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;sdf-convert&quot;</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;sdf-source&quot;</span>)]</span>
 <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>sdf</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Error</span> {
     <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>err</span>: <span class='ident'>sdf</span>::<span class='ident'>Error</span>) <span class='op'>-&gt;</span> <span class='ident'>Error</span> {
         <span class='ident'>Error</span>::<span class='ident'>Sdf</span>(<span class='ident'>err</span>)
