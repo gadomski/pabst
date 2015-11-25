@@ -5,15 +5,13 @@ set -o errexit -o nounset
 project="pabst"
 rev=$(git rev-parse --short HEAD)
 
-cargo doc
+cargo doc --features "rxp sdf-convert"
 cd target/doc
 echo "<meta http-equiv=refresh content=0;url=${project}/index.html>" > index.html
 
 git init
-git config user.name "Pete Gadomski"
-git config user.email "pete.gadomski@gmail.com"
 
-git remote add upstream "https://$GH_TOKEN@github.com/gadomski/pabst"
+git remote add upstream "git@github.com:gadomski/pabst"
 git fetch upstream
 git reset upstream/gh-pages
 
