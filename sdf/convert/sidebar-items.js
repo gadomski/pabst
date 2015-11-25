@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["discretize","Turns a single sdf record into zero or more `Point`s."]],"struct":[["Point","A 3D point in the scanner's own coordiante frame."]]});

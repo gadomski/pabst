@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Header","A las header."],["PointDataFormat","A wrapper around the u8 of a point data format."]]});

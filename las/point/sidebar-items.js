@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Classification","An enum to represent classifications."],["ScanDirection","An enum to represent scan direction."]],"struct":[["NumberOfReturns","A custom wrapper to represent a point's number of returns."],["Point","A las point."],["ReturnNumber","A custom wrapper to represent a point's return number."]]});

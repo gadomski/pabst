@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["open_file_sink","Opens a file sink with the given options"]],"mod":[["las","Sink points into a las file."],["sdc","Implement sink for .sdc."]],"trait":[["FileSink","A sink that puts points into a path."],["Sink","A point sink."]]});

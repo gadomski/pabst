@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Writer","An .sdc writer."]]});

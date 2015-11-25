@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Error","Our error type."]],"fn":[["last_error","Retrieves the last error from fwifc and returns it as a `&'static str`."]]});

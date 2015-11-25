@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Point` struct in crate `las`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Point">
+
+    <title>las::point::Point - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>las</a>::<wbr><a href='index.html'>point</a></p><script>window.sidebarCurrent = {name: 'Point', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>las</a>::<wbr><a href='index.html'>point</a>::<wbr><a class='struct' href=''>Point</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-5022' class='srclink' href='../../src/las/point.rs.html#8-63' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Point {
+    pub x: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub y: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub z: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub intensity: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub return_number: <a class='struct' href='../../las/point/struct.ReturnNumber.html' title='las::point::ReturnNumber'>ReturnNumber</a>,
+    pub number_of_returns: <a class='struct' href='../../las/point/struct.NumberOfReturns.html' title='las::point::NumberOfReturns'>NumberOfReturns</a>,
+    pub scan_direction: <a class='enum' href='../../las/point/enum.ScanDirection.html' title='las::point::ScanDirection'>ScanDirection</a>,
+    pub edge_of_flight_line: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub classification: <a class='enum' href='../../las/point/enum.Classification.html' title='las::point::Classification'>Classification</a>,
+    pub synthetic: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub key_point: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub withheld: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub scan_angle_rank: <a href='https://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a>,
+    pub user_data: <a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub point_source_id: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub gps_time: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>&gt;,
+    pub red: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>&gt;,
+    pub green: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>&gt;,
+    pub blue: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>&gt;,
+    pub extra_bytes: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;&gt;,
+}</pre><div class='docblock'><p>A las point.</p>
+</div><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                                  <td id='structfield.x'><code>x</code></td><td><div class='docblock'><p>The x value of the point, as a f64.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.y'><code>y</code></td><td><div class='docblock'><p>The y value of the point, as a f64.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.z'><code>z</code></td><td><div class='docblock'><p>The z value of the point, as a f64.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.intensity'><code>intensity</code></td><td><div class='docblock'><p>The pulse return magnitude.</p>
+
+<p>This value is system-specific.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.return_number'><code>return_number</code></td><td><div class='docblock'><p>The pulse return number for this point&#39;s pulse.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.number_of_returns'><code>number_of_returns</code></td><td><div class='docblock'><p>The total number of returns in this point&#39;s pulse.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.scan_direction'><code>scan_direction</code></td><td><div class='docblock'><p>The scan direction of the mirror, forwards or backwards.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.edge_of_flight_line'><code>edge_of_flight_line</code></td><td><div class='docblock'><p>Is this point at the edge of a flight line?</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.classification'><code>classification</code></td><td><div class='docblock'><p>The classification of this point.</p>
+
+<p>ASPRS defines some integer-to-classification mappings.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.synthetic'><code>synthetic</code></td><td><div class='docblock'><p>Was this point created by some other means than LiDAR?</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.key_point'><code>key_point</code></td><td><div class='docblock'><p>Is this point a key point?</p>
+
+<p>If so, try not to thin it.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.withheld'><code>withheld</code></td><td><div class='docblock'><p>Should this point be included in processing?</p>
+
+<p>A.k.a. &quot;deleted&quot;.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.scan_angle_rank'><code>scan_angle_rank</code></td><td><div class='docblock'><p>The truncated integer value of the scan angle.</p>
+
+<p>Negative values are left.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.user_data'><code>user_data</code></td><td><div class='docblock'><p>Data used at the user&#39;s discretion.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.point_source_id'><code>point_source_id</code></td><td><div class='docblock'><p>The point source id.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.gps_time'><code>gps_time</code></td><td><div class='docblock'><p>The GPS time this point was collected.</p>
+
+<p>Optional, does not exist in all point formats.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.red'><code>red</code></td><td><div class='docblock'><p>The red image channel, optional.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.green'><code>green</code></td><td><div class='docblock'><p>The green image channel, optional.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.blue'><code>blue</code></td><td><div class='docblock'><p>The blue image channel, optional.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.extra_bytes'><code>extra_bytes</code></td><td><div class='docblock'><p>Any extra bytes that were included in the point record.</p>
+
+<p>These are legal under the standard, but they break many readers.</p>
+</div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a></code></h4>
+<div class='docblock'><p>Creates a new point.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>point</span>::<span class='ident'>Point</span>;
+<span class='kw'>let</span> <span class='ident'>point</span> <span class='op'>=</span> <span class='ident'>Point</span>::<span class='ident'>new</span>();</pre>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a>) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.ne' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a>) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.default' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#method.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "las";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

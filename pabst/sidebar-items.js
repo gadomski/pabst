@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["error","Our error enum."],["point","A catchall LiDAR point."],["sink","Point sinks."],["source","Sources of points."]],"type":[["Result","Our custom result type."]]});

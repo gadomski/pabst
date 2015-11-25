@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["TargetType","How the point was derived from a waveform."]],"struct":[["Point","An SDC point."]]});

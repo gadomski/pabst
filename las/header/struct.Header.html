@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Header` struct in crate `las`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Header">
+
+    <title>las::header::Header - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>las</a>::<wbr><a href='index.html'>header</a></p><script>window.sidebarCurrent = {name: 'Header', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>las</a>::<wbr><a href='index.html'>header</a>::<wbr><a class='struct' href=''>Header</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-24' class='srclink' href='../../src/las/header.rs.html#20-98' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Header {
+    pub file_signature: <a href='https://doc.rust-lang.org/nightly/std/primitive.array.html'>[<a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>; 4]</a>,
+    pub file_source_id: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub global_encoding: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub guid_data_1: <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub guid_data_2: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub guid_data_3: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub guid_data_4: <a href='https://doc.rust-lang.org/nightly/std/primitive.array.html'>[<a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>; 8]</a>,
+    pub version_major: <a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub version_minor: <a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub system_identifier: <a href='https://doc.rust-lang.org/nightly/std/primitive.array.html'>[<a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>; 32]</a>,
+    pub generating_software: <a href='https://doc.rust-lang.org/nightly/std/primitive.array.html'>[<a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>; 32]</a>,
+    pub file_creation_day_of_year: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub file_creation_year: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub header_size: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub offset_to_point_data: <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub number_of_variable_length_records: <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub point_data_format: <a class='struct' href='../../las/header/struct.PointDataFormat.html' title='las::header::PointDataFormat'>PointDataFormat</a>,
+    pub point_data_record_length: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub number_of_point_records: <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub number_of_points_by_return: <a href='https://doc.rust-lang.org/nightly/std/primitive.array.html'>[<a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>; 5]</a>,
+    pub x_scale_factor: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub y_scale_factor: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub z_scale_factor: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub x_offset: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub y_offset: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub z_offset: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub x_max: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub x_min: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub y_max: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub y_min: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub z_max: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub z_min: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+}</pre><div class='docblock'><p>A las header.</p>
+</div><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                                  <td id='structfield.file_signature'><code>file_signature</code></td><td><div class='docblock'><p>The las file signature.</p>
+
+<p>Should always be &quot;LASF&quot;.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.file_source_id'><code>file_source_id</code></td><td><div class='docblock'><p>A numeric identifier for this file.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.global_encoding'><code>global_encoding</code></td><td><div class='docblock'><p>Unused in early version, and exapanded to help with GPS time offsets in later versions.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.guid_data_1'><code>guid_data_1</code></td><td><div class='docblock'><p>The first of four parts of the project id.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.guid_data_2'><code>guid_data_2</code></td><td><div class='docblock'><p>The second of four parts of the project id.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.guid_data_3'><code>guid_data_3</code></td><td><div class='docblock'><p>The third of four parts of the project id.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.guid_data_4'><code>guid_data_4</code></td><td><div class='docblock'><p>The fourth of four parts of the project id.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.version_major'><code>version_major</code></td><td><div class='docblock'><p>The las major version.</p>
+
+<p>Should always be 1.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.version_minor'><code>version_minor</code></td><td><div class='docblock'><p>The las minor version.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.system_identifier'><code>system_identifier</code></td><td><div class='docblock'><p>Generally the hardware system that created the las file.</p>
+
+<p>Can also be the algorithm that produced the lasfile. This field is poorly defined.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.generating_software'><code>generating_software</code></td><td><div class='docblock'><p>The software the generated the las file.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.file_creation_day_of_year'><code>file_creation_day_of_year</code></td><td><div class='docblock'><p>The day of the year, indexed to 1.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.file_creation_year'><code>file_creation_year</code></td><td><div class='docblock'><p>The year of file creation.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.header_size'><code>header_size</code></td><td><div class='docblock'><p>The size of the las header.</p>
+
+<p>Softwares are technically allowed to add custom extensions to the las header, which would
+then affect this header size, but that is discouraged as such support is not universal.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.offset_to_point_data'><code>offset_to_point_data</code></td><td><div class='docblock'><p>The byte offset to the beginning of point data.</p>
+
+<p>Includes the size of the header and the variable length records.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.number_of_variable_length_records'><code>number_of_variable_length_records</code></td><td><div class='docblock'><p>The number of variable length records.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.point_data_format'><code>point_data_format</code></td><td><div class='docblock'><p>The point data format.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.point_data_record_length'><code>point_data_record_length</code></td><td><div class='docblock'><p>The length of one point data record, in bytes.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.number_of_point_records'><code>number_of_point_records</code></td><td><div class='docblock'><p>The total number of point records.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.number_of_points_by_return'><code>number_of_points_by_return</code></td><td><div class='docblock'><p>The number of point records of each return number.</p>
+
+<p>This only supports five returns per pulse.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.x_scale_factor'><code>x_scale_factor</code></td><td><div class='docblock'><p>The x scale factor for each point.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.y_scale_factor'><code>y_scale_factor</code></td><td><div class='docblock'><p>The y scale factor for each point.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.z_scale_factor'><code>z_scale_factor</code></td><td><div class='docblock'><p>The z scale factor for each point.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.x_offset'><code>x_offset</code></td><td><div class='docblock'><p>The x offset for each point.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.y_offset'><code>y_offset</code></td><td><div class='docblock'><p>The y offset for each point.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.z_offset'><code>z_offset</code></td><td><div class='docblock'><p>The z offset for each point.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.x_max'><code>x_max</code></td><td><div class='docblock'><p>The maximum x value.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.x_min'><code>x_min</code></td><td><div class='docblock'><p>The minimum x value.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.y_max'><code>y_max</code></td><td><div class='docblock'><p>The maximum y value.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.y_min'><code>y_min</code></td><td><div class='docblock'><p>The minimum y value.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.z_max'><code>z_max</code></td><td><div class='docblock'><p>The maximum z value.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.z_min'><code>z_min</code></td><td><div class='docblock'><p>The minimum z value.</p>
+</div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a></code></h3><div class='impl-items'><h4 id='method.read_from' class='method'><code>fn <a href='#method.read_from' class='fnname'>read_from</a>&lt;R: <a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt;(reader: &amp;mut R) -&gt; <a class='type' href='../../las/type.Result.html' title='las::Result'>Result</a>&lt;<a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a>&gt;</code></h4>
+<div class='docblock'><p>Reads a header from a <code>Read</code>.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fs</span>::<span class='ident'>File</span>;
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>header</span>::<span class='ident'>Header</span>;
+<span class='kw'>let</span> <span class='kw-2'>ref</span> <span class='kw-2'>mut</span> <span class='ident'>file</span> <span class='op'>=</span> <span class='ident'>File</span>::<span class='ident'>open</span>(<span class='string'>&quot;data/1.0_0.las&quot;</span>).<span class='ident'>unwrap</span>();
+<span class='kw'>let</span> <span class='ident'>header</span> <span class='op'>=</span> <span class='ident'>Header</span>::<span class='ident'>read_from</span>(<span class='ident'>file</span>);</pre>
+</div><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a></code></h4>
+<div class='docblock'><p>Creates a new, empty header.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>header</span>::<span class='ident'>Header</span>;
+<span class='kw'>let</span> <span class='ident'>header</span> <span class='op'>=</span> <span class='ident'>Header</span>::<span class='ident'>new</span>();</pre>
+</div><h4 id='method.write_to' class='method'><code>fn <a href='#method.write_to' class='fnname'>write_to</a>&lt;W: <a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Write.html' title='std::io::Write'>Write</a>&gt;(&amp;self, writer: &amp;mut W) -&gt; <a class='type' href='../../las/type.Result.html' title='las::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>&gt;</code></h4>
+<div class='docblock'><p>Writes this header to a <code>Write</code>.</p>
+
+<p>Returns the number of bytes written.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>Cursor</span>;
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>header</span>::<span class='ident'>Header</span>;
+<span class='kw'>let</span> <span class='ident'>header</span> <span class='op'>=</span> <span class='ident'>Header</span>::<span class='ident'>new</span>();
+<span class='kw'>let</span> <span class='kw-2'>ref</span> <span class='kw-2'>mut</span> <span class='ident'>writer</span> <span class='op'>=</span> <span class='ident'>Cursor</span>::<span class='ident'>new</span>(<span class='ident'>Vec</span>::<span class='ident'>new</span>());
+<span class='kw'>let</span> <span class='ident'>bytes_written</span> <span class='op'>=</span> <span class='ident'>header</span>.<span class='ident'>write_to</span>(<span class='ident'>writer</span>).<span class='ident'>unwrap</span>();</pre>
+</div><h4 id='method.calculate_size' class='method'><code>fn <a href='#method.calculate_size' class='fnname'>calculate_size</a>(&amp;mut self)</code></h4>
+<div class='docblock'><p>Calculates the size of this header and assigns it to the header structure.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>header</span>::<span class='ident'>Header</span>;
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>header</span> <span class='op'>=</span> <span class='ident'>Header</span>::<span class='ident'>new</span>();
+<span class='ident'>header</span>.<span class='ident'>calculate_size</span>();
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>227</span>, <span class='ident'>header</span>.<span class='ident'>header_size</span>);</pre>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a>) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.ne' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a>) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a></code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a></code></h4>
+<h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "las";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

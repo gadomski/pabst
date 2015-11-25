@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Stream` struct in crate `las`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Stream">
+
+    <title>las::stream::Stream - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>las</a>::<wbr><a href='index.html'>stream</a></p><script>window.sidebarCurrent = {name: 'Stream', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>las</a>::<wbr><a href='index.html'>stream</a>::<wbr><a class='struct' href=''>Stream</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-7154' class='srclink' href='../../src/las/stream.rs.html#21-26' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Stream&lt;R: <a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt; {
+    // some fields omitted
+}</pre><div class='docblock'><p>A stream of las points.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../las/stream/struct.Stream.html' title='las::stream::Stream'>Stream</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/io/buffered/struct.BufReader.html' title='std::io::buffered::BufReader'>BufReader</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/fs/struct.File.html' title='std::fs::File'>File</a>&gt;&gt;</code></h3><div class='impl-items'><h4 id='method.from_path' class='method'><code>fn <a href='#method.from_path' class='fnname'>from_path</a>&lt;P: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a>&gt;&gt;(path: P) -&gt; <a class='type' href='../../las/type.Result.html' title='las::Result'>Result</a>&lt;<a class='struct' href='../../las/stream/struct.Stream.html' title='las::stream::Stream'>Stream</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/io/buffered/struct.BufReader.html' title='std::io::buffered::BufReader'>BufReader</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/fs/struct.File.html' title='std::fs::File'>File</a>&gt;&gt;&gt;</code></h4>
+<div class='docblock'><p>Opens a new stream for the given path.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>stream</span>::<span class='ident'>Stream</span>;
+<span class='kw'>let</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>Stream</span>::<span class='ident'>from_path</span>(<span class='string'>&quot;data/1.0_0.las&quot;</span>).<span class='ident'>unwrap</span>();</pre>
+</div></div><h3 class='impl'><code>impl&lt;R: <a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Seek.html' title='std::io::Seek'>Seek</a>&gt; <a class='struct' href='../../las/stream/struct.Stream.html' title='las::stream::Stream'>Stream</a>&lt;R&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(reader: R) -&gt; <a class='type' href='../../las/type.Result.html' title='las::Result'>Result</a>&lt;<a class='struct' href='../../las/stream/struct.Stream.html' title='las::stream::Stream'>Stream</a>&lt;R&gt;&gt;</code></h4>
+<div class='docblock'><p>Creates a new stream for a given <code>Read</code> object, consuming the read.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fs</span>::<span class='ident'>File</span>;
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>stream</span>::<span class='ident'>Stream</span>;
+<span class='kw'>let</span> <span class='ident'>file</span> <span class='op'>=</span> <span class='ident'>File</span>::<span class='ident'>open</span>(<span class='string'>&quot;data/1.0_0.las&quot;</span>).<span class='ident'>unwrap</span>();
+<span class='kw'>let</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>Stream</span>::<span class='ident'>new</span>(<span class='ident'>file</span>);</pre>
+</div><h4 id='method.next_point' class='method'><code>fn <a href='#method.next_point' class='fnname'>next_point</a>(&amp;mut self) -&gt; <a class='type' href='../../las/type.Result.html' title='las::Result'>Result</a>&lt;<a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a>&gt;&gt;</code></h4>
+<div class='docblock'><p>Returns the next point in this stream.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>stream</span>::<span class='ident'>Stream</span>;
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>Stream</span>::<span class='ident'>from_path</span>(<span class='string'>&quot;data/1.0_0.las&quot;</span>).<span class='ident'>unwrap</span>();
+<span class='kw'>let</span> <span class='ident'>point</span> <span class='op'>=</span> <span class='ident'>stream</span>.<span class='ident'>next_point</span>().<span class='ident'>unwrap</span>();
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>point</span>.<span class='ident'>is_some</span>());
+<span class='kw'>let</span> <span class='ident'>point</span> <span class='op'>=</span> <span class='ident'>stream</span>.<span class='ident'>next_point</span>().<span class='ident'>unwrap</span>();
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>point</span>.<span class='ident'>is_none</span>());</pre>
+</div></div><h3 class='impl'><code>impl&lt;R: <a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt; <a class='struct' href='../../las/stream/struct.Stream.html' title='las::stream::Stream'>Stream</a>&lt;R&gt;</code></h3><div class='impl-items'><h4 id='method.header' class='method'><code>fn <a href='#method.header' class='fnname'>header</a>(&amp;self) -&gt; <a class='struct' href='../../las/header/struct.Header.html' title='las::header::Header'>Header</a></code></h4>
+<div class='docblock'><p>Returns this stream&#39;s las header.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>stream</span>::<span class='ident'>Stream</span>;
+<span class='kw'>let</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>Stream</span>::<span class='ident'>from_path</span>(<span class='string'>&quot;data/1.0_0.las&quot;</span>).<span class='ident'>unwrap</span>();
+<span class='kw'>let</span> <span class='ident'>header</span> <span class='op'>=</span> <span class='ident'>stream</span>.<span class='ident'>header</span>();</pre>
+</div><h4 id='method.vlrs' class='method'><code>fn <a href='#method.vlrs' class='fnname'>vlrs</a>(&amp;self) -&gt; &amp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../las/vlr/struct.Vlr.html' title='las::vlr::Vlr'>Vlr</a>&gt;</code></h4>
+<div class='docblock'><p>Returns a reference to this stream&#39;s vlrs.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>stream</span>::<span class='ident'>Stream</span>;
+<span class='kw'>let</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>Stream</span>::<span class='ident'>from_path</span>(<span class='string'>&quot;data/1.0_0.las&quot;</span>).<span class='ident'>unwrap</span>();
+<span class='kw'>let</span> <span class='ident'>vlrs</span> <span class='op'>=</span> <span class='ident'>stream</span>.<span class='ident'>vlrs</span>();</pre>
+</div><h4 id='method.npoints' class='method'><code>fn <a href='#method.npoints' class='fnname'>npoints</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h4>
+<div class='docblock'><p>Returns the number of points in this lasfile, as specified by the header.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>stream</span>::<span class='ident'>Stream</span>;
+<span class='kw'>let</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>Stream</span>::<span class='ident'>from_path</span>(<span class='string'>&quot;data/1.0_0.las&quot;</span>).<span class='ident'>unwrap</span>();
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>stream</span>.<span class='ident'>npoints</span>());</pre>
+</div><h4 id='method.eof' class='method'><code>fn <a href='#method.eof' class='fnname'>eof</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Returns true if this stream is at the end of the file.</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>las</span>::<span class='ident'>stream</span>::<span class='ident'>Stream</span>;
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>Stream</span>::<span class='ident'>from_path</span>(<span class='string'>&quot;data/1.0_0.las&quot;</span>).<span class='ident'>unwrap</span>();
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>stream</span>.<span class='ident'>eof</span>());
+<span class='kw'>let</span> _ <span class='op'>=</span> <span class='ident'>stream</span>.<span class='ident'>next_point</span>().<span class='ident'>unwrap</span>();
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>stream</span>.<span class='ident'>eof</span>());</pre>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl&lt;R: <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../las/stream/struct.Stream.html' title='las::stream::Stream'>Stream</a>&lt;R&gt;</code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "las";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

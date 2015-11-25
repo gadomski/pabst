@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["ScanDirection","The direction that the scanner mirror was moving when the pulse was emitted."]],"struct":[["Intensity","An intensity value, with information about its minimum and maximum possible values."],["Point","A point."]]});

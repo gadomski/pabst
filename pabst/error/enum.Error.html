@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Error` enum in crate `pabst`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Error">
+
+    <title>pabst::error::Error - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>pabst</a>::<wbr><a href='index.html'>error</a></p><script>window.sidebarCurrent = {name: 'Error', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content enum">
+<h1 class='fqn'><span class='in-band'>Enum <a href='../index.html'>pabst</a>::<wbr><a href='index.html'>error</a>::<wbr><a class='enum' href=''>Error</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-16' class='srclink' href='../../src/pabst/error.rs.html#15-38' title='goto source code'>[src]</a></span></h1>
+<pre class='rust enum'>pub enum Error {
+    InvalidOption(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>),
+    MissingDimension(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>),
+    Las(<a class='enum' href='../../las/error/enum.Error.html' title='las::error::Error'>Error</a>),
+    ParseBool(<a class='struct' href='https://doc.rust-lang.org/nightly/core/str/struct.ParseBoolError.html' title='core::str::ParseBoolError'>ParseBoolError</a>),
+    ParseFloat(<a class='struct' href='https://doc.rust-lang.org/nightly/core/num/dec2flt/struct.ParseFloatError.html' title='core::num::dec2flt::ParseFloatError'>ParseFloatError</a>),
+    Rxp(<a class='enum' href='../../rivlib/error/enum.Error.html' title='rivlib::error::Error'>Error</a>),
+    Sdc(<a class='enum' href='../../sdc/error/enum.Error.html' title='sdc::error::Error'>Error</a>),
+    Sdf(<a class='enum' href='../../sdf/error/enum.Error.html' title='sdf::error::Error'>Error</a>),
+    UndefinedSink,
+    UndefinedSource,
+}</pre><div class='docblock'><p>Our custom error handling type.</p>
+</div><h2 class='variants'>Variants</h2>
+<table><tr><td id='variant.InvalidOption'><code>InvalidOption</code></td><td><div class='docblock'><p>Invalid options to a source or sink.</p>
+</div></td></tr><tr><td id='variant.MissingDimension'><code>MissingDimension</code></td><td><div class='docblock'><p>A point is missing a dimension that is required by someone else, usually a <code>Sink</code>.</p>
+</div></td></tr><tr><td id='variant.Las'><code>Las</code></td><td><div class='docblock'><p>A wrapper around a las error.</p>
+</div></td></tr><tr><td id='variant.ParseBool'><code>ParseBool</code></td><td><div class='docblock'><p>A wrapper around <code>std::str::ParseBoolError</code>.</p>
+</div></td></tr><tr><td id='variant.ParseFloat'><code>ParseFloat</code></td><td><div class='docblock'><p>A wrapper around <code>std::num::ParseFloatError</code>.</p>
+</div></td></tr><tr><td id='variant.Rxp'><code>Rxp</code></td><td><div class='docblock'><p>A wrapper around an rxp error.</p>
+</div></td></tr><tr><td id='variant.Sdc'><code>Sdc</code></td><td><div class='docblock'><p>A wrapper around an sdc error.</p>
+</div></td></tr><tr><td id='variant.Sdf'><code>Sdf</code></td><td><div class='docblock'><p>A wrapper around an sdf error.</p>
+</div></td></tr><tr><td id='variant.UndefinedSink'><code>UndefinedSink</code></td><td><div class='docblock'><p>The type of sink could not be determined.</p>
+</div></td></tr><tr><td id='variant.UndefinedSource'><code>UndefinedSource</code></td><td><div class='docblock'><p>The type of source could not be determined.</p>
+</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='enum' href='../../las/error/enum.Error.html' title='las::error::Error'>Error</a>&gt; for <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(err: <a class='enum' href='../../las/error/enum.Error.html' title='las::error::Error'>Error</a>) -&gt; <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/core/str/struct.ParseBoolError.html' title='core::str::ParseBoolError'>ParseBoolError</a>&gt; for <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(err: <a class='struct' href='https://doc.rust-lang.org/nightly/core/str/struct.ParseBoolError.html' title='core::str::ParseBoolError'>ParseBoolError</a>) -&gt; <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/core/num/dec2flt/struct.ParseFloatError.html' title='core::num::dec2flt::ParseFloatError'>ParseFloatError</a>&gt; for <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(err: <a class='struct' href='https://doc.rust-lang.org/nightly/core/num/dec2flt/struct.ParseFloatError.html' title='core::num::dec2flt::ParseFloatError'>ParseFloatError</a>) -&gt; <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='enum' href='../../rivlib/error/enum.Error.html' title='rivlib::error::Error'>Error</a>&gt; for <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(err: <a class='enum' href='../../rivlib/error/enum.Error.html' title='rivlib::error::Error'>Error</a>) -&gt; <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='enum' href='../../sdc/error/enum.Error.html' title='sdc::error::Error'>Error</a>&gt; for <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(err: <a class='enum' href='../../sdc/error/enum.Error.html' title='sdc::error::Error'>Error</a>) -&gt; <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='enum' href='../../sdf/error/enum.Error.html' title='sdf::error::Error'>Error</a>&gt; for <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(err: <a class='enum' href='../../sdf/error/enum.Error.html' title='sdf::error::Error'>Error</a>) -&gt; <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h4>
+</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../../pabst/error/enum.Error.html' title='pabst::error::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "pabst";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

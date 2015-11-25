@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Point` struct in crate `pabst`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Point">
+
+    <title>pabst::point::Point - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>pabst</a>::<wbr><a href='index.html'>point</a></p><script>window.sidebarCurrent = {name: 'Point', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>pabst</a>::<wbr><a href='index.html'>point</a>::<wbr><a class='struct' href=''>Point</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-283' class='srclink' href='../../src/pabst/point.rs.html#7-85' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Point {
+    pub x: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub y: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub z: <a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>,
+    pub intensity: <a class='struct' href='../../pabst/point/struct.Intensity.html' title='pabst::point::Intensity'>Intensity</a>,
+    pub return_number: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>&gt;,
+    pub number_of_returns: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>&gt;,
+    pub scan_direction: <a class='enum' href='../../pabst/point/enum.ScanDirection.html' title='pabst::point::ScanDirection'>ScanDirection</a>,
+    pub edge_of_flight_line: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub classification: <a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub synthetic: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub key_point: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub withheld: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub scan_angle: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>&gt;,
+    pub point_source_id: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>&gt;,
+    pub user_data: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;,
+    pub gps_time: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>&gt;,
+    pub range: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>&gt;,
+    pub width: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>&gt;,
+    pub rg_index: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>&gt;,
+    pub facet_number: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;,
+    pub target_type: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;,
+    pub high_channel: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>&gt;,
+}</pre><div class='docblock'><p>A point.</p>
+</div><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                                  <td id='structfield.x'><code>x</code></td><td><div class='docblock'><p>The x dimension of a point. All points must have these.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.y'><code>y</code></td><td><div class='docblock'><p>The y dimension of a point. All points must have these.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.z'><code>z</code></td><td><div class='docblock'><p>The z dimension of a point. All points must have these.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.intensity'><code>intensity</code></td><td><div class='docblock'><p>This is the intensity of the backscattered energy, as detected by the LiDAR sensor. Since
+each sensor has its own dynamic range, an intensity value is actually three values — the
+intensity value itself, the minimum possible value, and the maximum possible value.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.return_number'><code>return_number</code></td><td><div class='docblock'><p>The return number of this point.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.number_of_returns'><code>number_of_returns</code></td><td><div class='docblock'><p>The total number of returns in the pulse of this point.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.scan_direction'><code>scan_direction</code></td><td><div class='docblock'><p>The direction that the scanner mirror was travelling when the point was collected. The only
+reason we include this field is that it is in the las standard. Anyone that doesn&#39;t collect
+scan direction information should just keep this at the default of
+<code>ScanDirection::Unknown</code>, and let the las sink deal with it.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.edge_of_flight_line'><code>edge_of_flight_line</code></td><td><div class='docblock'><p>Is this point at the edge of a flight line? Again, a crappy field that was included just
+becuase las.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.classification'><code>classification</code></td><td><div class='docblock'><p>The classification of this point.</p>
+
+<p>I&#39;m not sure if I want to really define out the ASPRS classification mappings in this
+library, or leave that to the las library. I&#39;m leaning towards keeping that in las just
+because I don&#39;t like classifications as a general concept, and so I try to stay away from
+them whenever I can.</p>
+
+<p>The value of <code>0</code> is &quot;Created, never classified&quot; according to at least one of the las
+specifications, so this is a sensible default value.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.synthetic'><code>synthetic</code></td><td><div class='docblock'><p>Is this a synthetic point? Urgh. las again. Just keep this false unless someone out there
+is actually using the synthetic field.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.key_point'><code>key_point</code></td><td><div class='docblock'><p>Okay, las, model key point? Really? You&#39;re taking up a perfectly good bit in <em>every single
+las point</em> just for this field? Really?</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.withheld'><code>withheld</code></td><td><div class='docblock'><p>It&#39;s not even worth complaining anymore. Just look at a las standard to see what all these
+crappy fields mean. And while you&#39;re at it, try clicking on some of the URLs <em>in the las
+standards</em>. I&#39;ll bet some of them are broken. That&#39;s how good ASPRS are (is?).</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.scan_angle'><code>scan_angle</code></td><td><div class='docblock'><p>Whew, back into the normal realm of fields. This is the angle of the mirror when the point
+was captured. Angle is usually defined with zero being straight out of the scanner.</p>
+
+<p>Las, in all of its wisdom, only stores these as integers, but more sensible formats allow
+for finer resolution, so we dial this up to <code>f64</code> and let the las sink throw away perfectly
+good data.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.point_source_id'><code>point_source_id</code></td><td><div class='docblock'><p>Why, las, why. What is this, even.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.user_data'><code>user_data</code></td><td><div class='docblock'><p>Okay, I&#39;m done complaining now. In all seriousness, I thought about throwing this field
+out, in particular, but I figure since las is so used I should just mirror it. But that
+doesn&#39;t mean I can&#39;t whine about it.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.gps_time'><code>gps_time</code></td><td><div class='docblock'><p>GNSS synchronized time.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.range'><code>range</code></td><td><div class='docblock'><p>The range of the point from the scanner. Note that for some formats, this explicity <em>does
+not</em> equal the cartesian distance to the x, y, z location of the point. This is a bit of an
+esoteric field but we include it because Riegl uses it a decent amount.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.width'><code>width</code></td><td><div class='docblock'><p>The width of the received pulse. Again, a pretty esoteric field, this time from the Riegl
+side of things. I get thinking more and more how to deal with these strange fields like
+this.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.rg_index'><code>rg_index</code></td><td><div class='docblock'><p>Man, this is the range index, and I have <em>no</em> idea what it means.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.facet_number'><code>facet_number</code></td><td><div class='docblock'><p>The number of the mirror facet that was used to send this pulse.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.target_type'><code>target_type</code></td><td><div class='docblock'><p>The target type, as an integer. Riegl uses some coded values for target type (Gaussian,
+Center of Gravity, etc), but at this point we don&#39;t choose to propagate those values up to
+this level.</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.high_channel'><code>high_channel</code></td><td><div class='docblock'><p>Is this point from a high channel?</p>
+
+<p>TODO this field should be turned into a newtype or enum</p>
+</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a>&gt; for <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(point: <a class='struct' href='../../las/point/struct.Point.html' title='las::point::Point'>Point</a>) -&gt; <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../../sdc/point/struct.Point.html' title='sdc::point::Point'>Point</a>&gt; for <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(point: <a class='struct' href='../../sdc/point/struct.Point.html' title='sdc::point::Point'>Point</a>) -&gt; <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../../sdf/convert/struct.Point.html' title='sdf::convert::Point'>Point</a>&gt; for <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(point: <a class='struct' href='../../sdf/convert/struct.Point.html' title='sdf::convert::Point'>Point</a>) -&gt; <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../../rivlib/stream/struct.Point.html' title='rivlib::stream::Point'>Point</a>&gt; for <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(point: <a class='struct' href='../../rivlib/stream/struct.Point.html' title='rivlib::stream::Point'>Point</a>) -&gt; <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h4>
+</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.default' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#method.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../pabst/point/struct.Point.html' title='pabst::point::Point'>Point</a></code></h4>
+<h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "pabst";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

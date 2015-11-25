@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="Source to the Rust file `src/point.rs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang">
+
+    <title>point.rs.html -- source</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+</pre><pre class='rust '>
+<span class='doccomment'>//! A catchall LiDAR point.</span>
+
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>u16</span>;
+
+<span class='doccomment'>/// A point.</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Copy</span>, <span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Point</span> {
+    <span class='doccomment'>/// The x dimension of a point. All points must have these.</span>
+    <span class='kw'>pub</span> <span class='ident'>x</span>: <span class='ident'>f64</span>,
+    <span class='doccomment'>/// The y dimension of a point. All points must have these.</span>
+    <span class='kw'>pub</span> <span class='ident'>y</span>: <span class='ident'>f64</span>,
+    <span class='doccomment'>/// The z dimension of a point. All points must have these.</span>
+    <span class='kw'>pub</span> <span class='ident'>z</span>: <span class='ident'>f64</span>,
+    <span class='doccomment'>/// This is the intensity of the backscattered energy, as detected by the LiDAR sensor. Since</span>
+    <span class='doccomment'>/// each sensor has its own dynamic range, an intensity value is actually three values — the</span>
+    <span class='doccomment'>/// intensity value itself, the minimum possible value, and the maximum possible value.</span>
+    <span class='kw'>pub</span> <span class='ident'>intensity</span>: <span class='ident'>Intensity</span>,
+    <span class='doccomment'>/// The return number of this point.</span>
+    <span class='kw'>pub</span> <span class='ident'>return_number</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// The total number of returns in the pulse of this point.</span>
+    <span class='kw'>pub</span> <span class='ident'>number_of_returns</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// The direction that the scanner mirror was travelling when the point was collected. The only</span>
+    <span class='doccomment'>/// reason we include this field is that it is in the las standard. Anyone that doesn&#39;t collect</span>
+    <span class='doccomment'>/// scan direction information should just keep this at the default of</span>
+    <span class='doccomment'>/// `ScanDirection::Unknown`, and let the las sink deal with it.</span>
+    <span class='kw'>pub</span> <span class='ident'>scan_direction</span>: <span class='ident'>ScanDirection</span>,
+    <span class='doccomment'>/// Is this point at the edge of a flight line? Again, a crappy field that was included just</span>
+    <span class='doccomment'>/// becuase las.</span>
+    <span class='kw'>pub</span> <span class='ident'>edge_of_flight_line</span>: <span class='ident'>bool</span>,
+    <span class='doccomment'>/// The classification of this point.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// I&#39;m not sure if I want to really define out the ASPRS classification mappings in this</span>
+    <span class='doccomment'>/// library, or leave that to the las library. I&#39;m leaning towards keeping that in las just</span>
+    <span class='doccomment'>/// because I don&#39;t like classifications as a general concept, and so I try to stay away from</span>
+    <span class='doccomment'>/// them whenever I can.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The value of `0` is &quot;Created, never classified&quot; according to at least one of the las</span>
+    <span class='doccomment'>/// specifications, so this is a sensible default value.</span>
+    <span class='kw'>pub</span> <span class='ident'>classification</span>: <span class='ident'>u8</span>,
+    <span class='doccomment'>/// Is this a synthetic point? Urgh. las again. Just keep this false unless someone out there</span>
+    <span class='doccomment'>/// is actually using the synthetic field.</span>
+    <span class='kw'>pub</span> <span class='ident'>synthetic</span>: <span class='ident'>bool</span>,
+    <span class='doccomment'>/// Okay, las, model key point? Really? You&#39;re taking up a perfectly good bit in *every single</span>
+    <span class='doccomment'>/// las point* just for this field? Really?</span>
+    <span class='kw'>pub</span> <span class='ident'>key_point</span>: <span class='ident'>bool</span>,
+    <span class='doccomment'>/// It&#39;s not even worth complaining anymore. Just look at a las standard to see what all these</span>
+    <span class='doccomment'>/// crappy fields mean. And while you&#39;re at it, try clicking on some of the URLs *in the las</span>
+    <span class='doccomment'>/// standards*. I&#39;ll bet some of them are broken. That&#39;s how good ASPRS are (is?).</span>
+    <span class='kw'>pub</span> <span class='ident'>withheld</span>: <span class='ident'>bool</span>,
+    <span class='doccomment'>/// Whew, back into the normal realm of fields. This is the angle of the mirror when the point</span>
+    <span class='doccomment'>/// was captured. Angle is usually defined with zero being straight out of the scanner.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// Las, in all of its wisdom, only stores these as integers, but more sensible formats allow</span>
+    <span class='doccomment'>/// for finer resolution, so we dial this up to `f64` and let the las sink throw away perfectly</span>
+    <span class='doccomment'>/// good data.</span>
+    <span class='kw'>pub</span> <span class='ident'>scan_angle</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>f64</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// Why, las, why. What is this, even.</span>
+    <span class='kw'>pub</span> <span class='ident'>point_source_id</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>u16</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// Okay, I&#39;m done complaining now. In all seriousness, I thought about throwing this field</span>
+    <span class='doccomment'>/// out, in particular, but I figure since las is so used I should just mirror it. But that</span>
+    <span class='doccomment'>/// doesn&#39;t mean I can&#39;t whine about it.</span>
+    <span class='kw'>pub</span> <span class='ident'>user_data</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// GNSS synchronized time.</span>
+    <span class='kw'>pub</span> <span class='ident'>gps_time</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>f64</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// The range of the point from the scanner. Note that for some formats, this explicity *does</span>
+    <span class='doccomment'>/// not* equal the cartesian distance to the x, y, z location of the point. This is a bit of an</span>
+    <span class='doccomment'>/// esoteric field but we include it because Riegl uses it a decent amount.</span>
+    <span class='kw'>pub</span> <span class='ident'>range</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>f64</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// The width of the received pulse. Again, a pretty esoteric field, this time from the Riegl</span>
+    <span class='doccomment'>/// side of things. I get thinking more and more how to deal with these strange fields like</span>
+    <span class='doccomment'>/// this.</span>
+    <span class='kw'>pub</span> <span class='ident'>width</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>f64</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// Man, this is the range index, and I have *no* idea what it means.</span>
+    <span class='kw'>pub</span> <span class='ident'>rg_index</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>f64</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// The number of the mirror facet that was used to send this pulse.</span>
+    <span class='kw'>pub</span> <span class='ident'>facet_number</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// The target type, as an integer. Riegl uses some coded values for target type (Gaussian,</span>
+    <span class='doccomment'>/// Center of Gravity, etc), but at this point we don&#39;t choose to propagate those values up to</span>
+    <span class='doccomment'>/// this level.</span>
+    <span class='kw'>pub</span> <span class='ident'>target_type</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// Is this point from a high channel?</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// TODO this field should be turned into a newtype or enum</span>
+    <span class='kw'>pub</span> <span class='ident'>high_channel</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>bool</span><span class='op'>&gt;</span>,
+}
+
+<span class='doccomment'>/// The direction that the scanner mirror was moving when the pulse was emitted.</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Copy</span>, <span class='ident'>Debug</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>ScanDirection</span> {
+    <span class='doccomment'>/// Forward.</span>
+    <span class='ident'>Forward</span>,
+    <span class='doccomment'>/// Backwards.</span>
+    <span class='ident'>Backward</span>,
+    <span class='doccomment'>/// The scan direction is undefined.</span>
+    <span class='ident'>Unknown</span>,
+}
+
+<span class='kw'>impl</span> <span class='ident'>Default</span> <span class='kw'>for</span> <span class='ident'>ScanDirection</span> {
+    <span class='kw'>fn</span> <span class='ident'>default</span>() <span class='op'>-&gt;</span> <span class='ident'>ScanDirection</span> {
+        <span class='ident'>ScanDirection</span>::<span class='ident'>Unknown</span>
+    }
+}
+
+<span class='doccomment'>/// An intensity value, with information about its minimum and maximum possible values.</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Copy</span>, <span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Intensity</span> {
+    <span class='ident'>value</span>: <span class='ident'>f64</span>,
+    <span class='ident'>min</span>: <span class='ident'>f64</span>,
+    <span class='ident'>max</span>: <span class='ident'>f64</span>,
+}
+
+<span class='kw'>impl</span> <span class='ident'>Intensity</span> {
+    <span class='doccomment'>/// Creates a new intensity with the min and the max set to the u16 bounds.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// use pabst::point::Intensity;</span>
+    <span class='doccomment'>/// let intensity = Intensity::from_u16(10);</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>from_u16</span>(<span class='ident'>value</span>: <span class='ident'>u16</span>) <span class='op'>-&gt;</span> <span class='ident'>Intensity</span> {
+        <span class='ident'>Intensity</span> {
+            <span class='ident'>value</span>: <span class='ident'>value</span> <span class='kw'>as</span> <span class='ident'>f64</span>,
+            <span class='ident'>min</span>: <span class='ident'>u16</span>::<span class='ident'>MIN</span> <span class='kw'>as</span> <span class='ident'>f64</span>,
+            <span class='ident'>max</span>: <span class='ident'>u16</span>::<span class='ident'>MAX</span> <span class='kw'>as</span> <span class='ident'>f64</span>,
+        }
+    }
+
+
+    <span class='doccomment'>/// Creates a new intensity with the value, minimu, and maximum.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// use pabst::point::Intensity;</span>
+    <span class='doccomment'>/// let intensity = Intensity::new(1.0, 0.0, 2.0);</span>
+    <span class='doccomment'>/// assert_eq!(32767, intensity.as_u16());</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>value</span>: <span class='ident'>f64</span>, <span class='ident'>min</span>: <span class='ident'>f64</span>, <span class='ident'>max</span>: <span class='ident'>f64</span>) <span class='op'>-&gt;</span> <span class='ident'>Intensity</span> {
+        <span class='ident'>Intensity</span> {
+            <span class='ident'>value</span>: <span class='ident'>value</span>,
+            <span class='ident'>min</span>: <span class='ident'>min</span>,
+            <span class='ident'>max</span>: <span class='ident'>max</span>,
+        }
+    }
+
+    <span class='doccomment'>/// Returns this intensity value as a u16.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// use pabst::point::Intensity;</span>
+    <span class='doccomment'>/// let intensity = Intensity::from_u16(10);</span>
+    <span class='doccomment'>/// assert_eq!(10, intensity.as_u16());</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>as_u16</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>u16</span> {
+        (<span class='ident'>u16</span>::<span class='ident'>MAX</span> <span class='kw'>as</span> <span class='ident'>f64</span> <span class='op'>*</span> (<span class='self'>self</span>.<span class='ident'>value</span> <span class='op'>-</span> <span class='self'>self</span>.<span class='ident'>min</span>) <span class='op'>/</span> (<span class='self'>self</span>.<span class='ident'>max</span> <span class='op'>-</span> <span class='self'>self</span>.<span class='ident'>min</span>)) <span class='kw'>as</span> <span class='ident'>u16</span>
+    }
+}
+</pre>
+</section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "pabst";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>
