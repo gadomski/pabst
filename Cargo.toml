@@ -9,6 +9,6 @@ sdf-convert = ["sdf"]
 
 [dependencies]
 las = { git = "https://github.com/gadomski/las-rs.git" }
-rivlib = { git = "https://github.com/gadomski/rivlib-rs.git", optional = true }
-sdc = { git = "https://github.com/gadomski/sdc-rs.git" }
-sdf = { git = "https://github.com/gadomski/sdf-rs.git", optional = true }
+rivlib = { version="0.1", optional = true }
+sdc = "0.1"
+sdf = { version="0.1", optional = true }
