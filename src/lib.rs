@@ -8,10 +8,10 @@
 #![deny(fat_ptr_transmutes, missing_copy_implementations, missing_debug_implementations, missing_docs, trivial_casts, trivial_numeric_casts, unsafe_code, unused_extern_crates, unused_import_braces, unused_qualifications, unused_results, variant_size_differences)]
 
 extern crate las;
-#[cfg(feature = "rxp")]
+#[cfg(feature = "rxp-source")]
 extern crate rivlib;
 extern crate sdc;
-#[cfg(feature = "sdf-convert")]
+#[cfg(feature = "sdf-source")]
 extern crate sdf;
 
 pub mod error;

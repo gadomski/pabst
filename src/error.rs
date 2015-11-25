@@ -4,10 +4,10 @@ use std::num::ParseFloatError;
 use std::str::ParseBoolError;
 
 use las;
-#[cfg(feature = "rxp")]
+#[cfg(feature = "rxp-source")]
 use rivlib;
 use sdc;
-#[cfg(feature = "sdf-convert")]
+#[cfg(feature = "sdf-source")]
 use sdf;
 
 /// Our custom error handling type.
@@ -23,12 +23,12 @@ pub enum Error {
     ParseBool(ParseBoolError),
     /// A wrapper around `std::num::ParseFloatError`.
     ParseFloat(ParseFloatError),
-    #[cfg(feature = "rxp")]
+    #[cfg(feature = "rxp-source")]
     /// A wrapper around an rxp error.
     Rxp(rivlib::Error),
     /// A wrapper around an sdc error.
     Sdc(sdc::Error),
-    #[cfg(feature = "sdf-convert")]
+    #[cfg(feature = "sdf-source")]
     /// A wrapper around an sdf error.
     Sdf(sdf::Error),
     /// The type of sink could not be determined.
@@ -55,7 +55,7 @@ impl From<ParseFloatError> for Error {
     }
 }
 
-#[cfg(feature = "rxp")]
+#[cfg(feature = "rxp-source")]
 impl From<rivlib::Error> for Error {
     fn from(err: rivlib::Error) -> Error {
         Error::Rxp(err)
@@ -68,7 +68,7 @@ impl From<sdc::Error> for Error {
     }
 }
 
-#[cfg(feature = "sdf-convert")]
+#[cfg(feature = "sdf-source")]
 impl From<sdf::Error> for Error {
     fn from(err: sdf::Error) -> Error {
         Error::Sdf(err)

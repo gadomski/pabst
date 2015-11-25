@@ -5,7 +5,7 @@ set -o errexit -o nounset
 project="pabst"
 rev=$(git rev-parse --short HEAD)
 
-cargo doc --features "rxp sdf-convert"
+cargo doc --features "rxp-source sdf-source"
 cd target/doc
 echo "<meta http-equiv=refresh content=0;url=${project}/index.html>" > index.html
 

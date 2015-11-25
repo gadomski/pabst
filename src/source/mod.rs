@@ -4,9 +4,9 @@
 
 pub mod las;
 pub mod sdc;
-#[cfg(feature = "sdf-convert")]
+#[cfg(feature = "sdf-source")]
 pub mod sdf;
-#[cfg(feature = "rxp")]
+#[cfg(feature = "rxp-source")]
 pub mod rxp;
 
 use std::collections::HashMap;
@@ -16,7 +16,7 @@ use std::io::BufReader;
 use std::path::Path;
 
 use las::Stream as LasStream;
-#[cfg(feature = "rxp")]
+#[cfg(feature = "rxp-source")]
 use rivlib::Stream as RxpStream;
 
 use Result;
@@ -37,8 +37,8 @@ pub fn open_file_source<P>(path: P, options: HashMap<String, String>) -> Result<
 {
     match Path::new(&path).extension().and_then(|e| e.to_str()) {
         Some("las") => LasStream::<BufReader<File>>::open_file_source(path, options),
-        #[cfg(feature = "rxp")]
-            Some("rxp") => RxpStream::open_file_source(path, options),
+        #[cfg(feature = "rxp-source")]
+        Some("rxp") => RxpStream::open_file_source(path, options),
         _ => Err(Error::UndefinedSource),
     }
 }

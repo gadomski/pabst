@@ -4,8 +4,8 @@ version = "0.1.0"
 authors = ["Pete Gadomski <pete.gadomski@gmail.com>"]
 
 [features]
-rxp = ["rivlib"]
-sdf-convert = ["sdf"]
+rxp-source = ["rivlib"]
+sdf-source = ["sdf"]
 
 [dependencies]
 las = { git = "https://github.com/gadomski/las-rs.git" }
