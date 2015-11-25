@@ -13,6 +13,7 @@ extern crate rivlib;
 extern crate sdc;
 #[cfg(feature = "sdf-source")]
 extern crate sdf;
+extern crate toml;
 
 pub mod error;
 pub mod point;

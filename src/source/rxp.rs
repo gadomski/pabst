@@ -2,11 +2,11 @@
 //!
 //! `rxp` is a data layout format from Riegl.
 
-use std::collections::HashMap;
 use std::ffi::OsStr;
 use std::path::Path;
 
 use rivlib;
+use toml;
 
 use error::Error;
 use point::{Intensity, Point};
@@ -49,14 +49,16 @@ impl From<rivlib::Point> for Point {
 impl FileSource for rivlib::Stream {
     // TODO this panics if the path isn't valid
     fn open_file_source<P: AsRef<Path> + AsRef<OsStr>>(path: P,
-                                                       options: HashMap<String, String>)
+                                                       options: Option<&toml::Table>)
                                                        -> Result<Box<Source>> {
         let mut sync_to_pps = true;
         let path = OsStr::new(&path).to_str().unwrap();
-        for (key, val) in options {
-            match (*key).as_ref() {
-                "sync-to-pps" => sync_to_pps = try!(val.parse()),
-                _ => return Err(Error::InvalidOption(val)),
+        if let Some(table) = options {
+            for (key, val) in table {
+                match key.as_ref() {
+                    "sync-to-pps" => sync_to_pps = true,
+                    _ => return Err(Error::InvalidOption(val.as_str().unwrap().to_string())),
+                }
             }
         }
         Ok(Box::new(try!(rivlib::Stream::open(path, sync_to_pps))))
@@ -65,9 +67,8 @@ impl FileSource for rivlib::Stream {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
-
     use rivlib;
+    use toml;
 
     use source::{open_file_source, Source};
 
@@ -94,9 +95,9 @@ mod tests {
 
     #[test]
     fn file_source() {
-        let mut options = HashMap::new();
-        let _ = options.insert("sync-to-pps".to_string(), "true".to_string());
-        let mut source = open_file_source("data/130501_232206_cut.rxp", options).unwrap();
+        let mut options = toml::Table::new();
+        let _ = options.insert("sync-to-pps".to_string(), toml::Value::Boolean(true));
+        let mut source = open_file_source("data/130501_232206_cut.rxp", Some(&options)).unwrap();
         let points = source.source_to_end(200000).unwrap();
         assert_eq!(177208, points.len());
     }

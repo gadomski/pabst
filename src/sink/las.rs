@@ -1,9 +1,9 @@
 //! Sink points into a las file.
 
-use std::collections::HashMap;
 use std::path::Path;
 
 use las;
+use toml;
 
 use Result;
 use error::Error;
@@ -51,27 +51,43 @@ fn from_point(point: Point) -> Result<las::Point> {
 }
 
 impl<P: 'static + AsRef<Path>> FileSink<P> for las::Writer<P> {
-    fn open_file_sink(path: P, options: HashMap<String, String>) -> Result<Box<Sink>> {
+    fn open_file_sink(path: P, options: Option<&toml::Table>) -> Result<Box<Sink>> {
         let mut writer = las::Writer::from_path(path);
-        for (key, val) in options.iter() {
-            match key.to_lowercase().as_ref() {
-                "scale-factors" | "scaling" => {
-                    let factors: Vec<_> = val.split(|c| c == ' ' || c == ',').collect();
-                    if factors.len() != 3 {
-                        return Err(Error::InvalidOption(format!("Incorrect number of scale \
-                                                                 factors provided, wanted 3 \
-                                                                 but got {}",
-                                                                factors.len())));
+        if let Some(options) = options {
+            for (key, val) in options.iter() {
+                match key.to_lowercase().as_ref() {
+                    "scale-factors" | "scaling" => {
+                        if let &toml::Value::Array(ref array) = val {
+                            if array.len() != 3 {
+                                return Err(Error::InvalidOption("Incorrect number of scale \
+                                                                 factors"
+                                                                    .to_string()));
+                            }
+                            let mut factors = Vec::with_capacity(3);
+                            for value in array {
+                                factors.push(try!(value.as_float()
+                                                       .ok_or(Error::InvalidOption("Unable to \
+                                                                                    parse scale \
+                                                                                    factor as \
+                                                                                    float"
+                                                                                       .to_string()))));
+                            }
+                            writer = writer.scale_factors(factors[0], factors[1], factors[2]);
+                        } else {
+                            return Err(Error::InvalidOption("Invalid value for scale factor"
+                                                                .to_string()));
+                        }
                     }
-                    writer = writer.scale_factors(try!(factors[0].parse()),
-                                                  try!(factors[1].parse()),
-                                                  try!(factors[2].parse()));
-                }
-                "auto-offset" | "auto-offsets" => writer = writer.auto_offsets(try!(val.parse())),
-                _ => {
-                    return Err(Error::InvalidOption(format!("The las sink does not know how to \
-                                                             handle this option: {}",
-                                                            key)));
+                    "auto-offset" | "auto-offsets" => writer = writer.auto_offsets(try!(val.as_bool()
+                                                             .ok_or(Error::InvalidOption("Unable to \
+                                                                                    parse auto \
+                                                                                    offset as \
+                                                                                    boolean".to_string())))),
+                    _ => {
+                        return Err(Error::InvalidOption(format!("The las sink does not know \
+                                                                 how to handle this option: {}",
+                                                                key)));
+                    }
                 }
             }
         }
@@ -82,7 +98,6 @@ impl<P: 'static + AsRef<Path>> FileSink<P> for las::Writer<P> {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
     use std::fs::remove_file;
 
     use las;
@@ -107,8 +122,8 @@ mod tests {
 
     #[test]
     fn source_and_sink() {
-        let mut source = open_file_source("data/1.0_0.las", HashMap::new()).unwrap();
-        let mut sink = open_file_sink("source_and_sink.las", HashMap::new()).unwrap();
+        let mut source = open_file_source("data/1.0_0.las", None).unwrap();
+        let mut sink = open_file_sink("source_and_sink.las", None).unwrap();
         for point in source.source_to_end(100).unwrap() {
             sink.sink(point).unwrap();
         }

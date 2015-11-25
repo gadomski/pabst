@@ -1,10 +1,10 @@
 //! Source las points.
 
-use std::collections::HashMap;
 use std::io::{Read, Seek};
 use std::path::Path;
 
 use las;
+use toml;
 
 use Result;
 use error::Error;
@@ -32,9 +32,9 @@ impl<R: Read + Seek> Source for las::Stream<R> {
 
 impl<R: Read + Seek> FileSource for las::Stream<R> {
     fn open_file_source<P: AsRef<Path>>(path: P,
-                                        options: HashMap<String, String>)
+                                        options: Option<&toml::Table>)
                                         -> Result<Box<Source>> {
-        if !options.is_empty() {
+        if options.is_some() {
             return Err(Error::InvalidOption("las source does not support any options at this \
                                              time"
                                                 .to_string()));

@@ -12,3 +12,4 @@ las = { git = "https://github.com/gadomski/las-rs.git" }
 rivlib = { version="0.1", optional = true }
 sdc = "0.1"
 sdf = { version="0.1", optional = true }
+toml = "0.1"
