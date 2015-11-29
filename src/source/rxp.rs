@@ -19,6 +19,10 @@ impl Source for rivlib::Stream {
             .map_err(|e| Error::from(e))
             .map(|o| o.map(|v| v.into_iter().map(|p| Point::from(p)).collect()))
     }
+
+    fn source_len(&mut self) -> Option<usize> {
+        None
+    }
 }
 
 impl From<rivlib::Point> for Point {

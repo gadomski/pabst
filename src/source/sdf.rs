@@ -5,6 +5,7 @@
 
 use std::ffi::OsStr;
 use std::path::Path;
+use std::u32;
 
 use sdf;
 use toml;
@@ -41,6 +42,27 @@ impl Source for sdf::File {
         } else {
             Ok(Some(points))
         }
+    }
+
+    fn source_len(&mut self) -> Option<usize> {
+        if self.reindex().is_err() {
+            return None;
+        }
+        if self.seek(0).is_err() {
+            return None;
+        }
+        let start = match self.tell() {
+            Ok(n) => n,
+            Err(_) => return None,
+        };
+        if self.seek(u32::MAX).is_err() {
+            return None;
+        }
+        let end = match self.tell() {
+            Ok(n) => n,
+            Err(_) => return None,
+        };
+        Some((end - start) as usize)
     }
 }
 

@@ -25,6 +25,10 @@ impl<R: Read> Source for sdc::Reader<R> {
         }
         Ok(Some(points))
     }
+
+    fn source_len(&mut self) -> Option<usize> {
+        None
+    }
 }
 
 impl From<sdc::Point> for Point {

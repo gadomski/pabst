@@ -67,6 +67,15 @@ pub trait Source {
             }
         }
     }
+
+    /// Returns the total number of points in this source.
+    ///
+    /// If possible, sources should prefer to report point totals from headers, etc, rather than
+    /// reading all of the points. For this reason, users of this method should be aware that it
+    /// might not be exactly correct.
+    ///
+    /// Sources that cannot know their point count should return `None`.
+    fn source_len(&mut self) -> Option<usize>;
 }
 
 /// A point source that can be opened from a path.

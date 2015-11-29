@@ -28,6 +28,10 @@ impl<R: Read + Seek> Source for las::Reader<R> {
         }
         Ok(Some(points))
     }
+
+    fn source_len(&mut self) -> Option<usize> {
+        Some(self.npoints() as usize)
+    }
 }
 
 impl<R: Read + Seek> FileSource for las::Reader<R> {
