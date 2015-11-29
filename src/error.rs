@@ -1,5 +1,7 @@
 //! Our error enum.
 
+use std::error;
+use std::fmt;
 use std::num::ParseFloatError;
 use std::str::ParseBoolError;
 
@@ -35,6 +37,58 @@ pub enum Error {
     UndefinedSink,
     /// The type of source could not be determined.
     UndefinedSource,
+}
+
+impl error::Error for Error {
+    fn description(&self) -> &str {
+        match *self {
+            Error::InvalidOption(_) => "invalid option",
+            Error::MissingDimension(_) => "missing dimension",
+            Error::Las(ref err) => err.description(),
+            Error::ParseBool(ref err) => err.description(),
+            Error::ParseFloat(ref err) => err.description(),
+            #[cfg(feature = "rxp-source")]
+            Error::Rxp(ref err) => err.description(),
+            Error::Sdc(ref err) => err.description(),
+            #[cfg(feature = "sdf-source")]
+            Error::Sdf(ref err) => err.description(),
+            Error::UndefinedSink => "undefined sink",
+            Error::UndefinedSource => "undefined source",
+        }
+    }
+
+    fn cause(&self) -> Option<&error::Error> {
+        match *self {
+            Error::Las(ref err) => Some(err),
+            Error::ParseBool(ref err) => Some(err),
+            Error::ParseFloat(ref err) => Some(err),
+            #[cfg(feature = "rxp-source")]
+            Error::Rxp(ref err) => Some(err),
+            Error::Sdc(ref err) => Some(err),
+            #[cfg(feature = "sdf-source")]
+            Error::Sdf(ref err) => Some(err),
+            _ => None,
+        }
+    }
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Error::InvalidOption(ref s) => write!(f, "Invalid option: {}", s),
+            Error::MissingDimension(ref s) => write!(f, "Missing dimension: {}", s),
+            Error::Las(ref err) => write!(f, "las error: {}", err),
+            Error::ParseBool(ref err) => write!(f, "Parse bool error: {}", err),
+            Error::ParseFloat(ref err) => write!(f, "Parse float error: {}", err),
+            #[cfg(feature = "rxp-source")]
+            Error::Rxp(ref err) => write!(f, "rxp error: {}", err),
+            Error::Sdc(ref err) => write!(f, "sdc error: {}", err),
+            #[cfg(feature = "sdf-source")]
+            Error::Sdf(ref err) => write!(f, "sdf error: {}", err),
+            Error::UndefinedSink => write!(f, "Undefined sink"),
+            Error::UndefinedSource => write!(f, "Undefined source"),
+        }
+    }
 }
 
 impl From<las::Error> for Error {
