@@ -2,16 +2,17 @@
 //!
 //! Our sdf library contains some logic to do discretization of waveforms, so we just use that
 //! rather than processing the waveforms ourselves.
-//!
-//! Because of the way sourcing works, we have to reindex the file every time source is called.
-//! Therefore, try to keep your wants big.
+
+use std::ffi::OsStr;
+use std::path::Path;
 
 use sdf;
+use toml;
 
 use Result;
 use error::Error;
 use point::{Intensity, Point};
-use source::Source;
+use source::{FileSource, Source};
 
 impl Source for sdf::File {
     fn source(&mut self, want: usize) -> Result<Option<Vec<Point>>> {
@@ -59,12 +60,26 @@ impl From<sdf::convert::Point> for Point {
     }
 }
 
+impl FileSource for sdf::File {
+    fn open_file_source<P>(path: P, options: Option<&toml::Table>) -> Result<Box<Source>>
+        where P: AsRef<Path> + AsRef<OsStr>
+    {
+        if options.is_some() {
+            return Err(Error::InvalidOption("sdf source does not suppport any options at this \
+                                             time"
+                                                .to_string()));
+        }
+        let path = OsStr::new(&path);
+        Ok(Box::new(try!(sdf::File::open(path.to_str().unwrap()))))
+    }
+}
+
 #[cfg(test)]
 mod tests {
 
     use sdf;
 
-    use source::Source;
+    use source::{Source, open_file_source};
 
     #[test]
     fn source_them_all() {
@@ -72,5 +87,10 @@ mod tests {
         let points = source.source(1000).unwrap().unwrap();
         assert!(points.len() >= 1000);
         source.remove_index().unwrap();
+    }
+
+    #[test]
+    fn open_file_source_test() {
+        let _ = open_file_source("data/110630_174316.sdf", None).unwrap();
     }
 }

@@ -4,10 +4,10 @@
 
 pub mod las;
 pub mod sdc;
-#[cfg(feature = "sdf-source")]
-pub mod sdf;
 #[cfg(feature = "rxp-source")]
 pub mod rxp;
+#[cfg(feature = "sdf-source")]
+pub mod sdf;
 
 use std::ffi::OsStr;
 use std::fs::File;
@@ -17,6 +17,8 @@ use std::path::Path;
 use las::Reader as LasReader;
 #[cfg(feature = "rxp-source")]
 use rivlib::Stream as RxpStream;
+#[cfg(feature = "sdf-source")]
+use sdf::File as SdfFile;
 use toml;
 
 use Result;
@@ -38,6 +40,8 @@ pub fn open_file_source<P>(path: P, options: Option<&toml::Table>) -> Result<Box
         Some("las") => LasReader::<BufReader<File>>::open_file_source(path, options),
         #[cfg(feature = "rxp-source")]
         Some("rxp") => RxpStream::open_file_source(path, options),
+        #[cfg(feature = "sdf-source")]
+        Some("sdf") => SdfFile::open_file_source(path, options),
         _ => Err(Error::UndefinedSource),
     }
 }
