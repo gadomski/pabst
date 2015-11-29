@@ -20,8 +20,10 @@ use point::Point;
 /// # Examples
 ///
 /// ```
+/// # use std::fs::remove_file;
 /// use pabst::sink::open_file_sink;
 /// let sink = open_file_sink("temp.las", None).unwrap();
+/// # remove_file("temp.las").unwrap();
 /// ```
 pub fn open_file_sink<P>(path: P, options: Option<&toml::Table>) -> Result<Box<Sink>>
 where P: 'static + AsRef<Path> + AsRef<OsStr>
