@@ -10,7 +10,7 @@ use point::Point;
 use sink::Sink;
 
 impl<W: Write> Sink for sdc::Writer<W> {
-    fn sink(&mut self, point: Point) -> Result<()> {
+    fn sink(&mut self, point: &Point) -> Result<()> {
         try!(self.write_point(&try!(from_point(point))));
         Ok(())
     }
@@ -20,7 +20,7 @@ impl<W: Write> Sink for sdc::Writer<W> {
     }
 }
 
-fn from_point(point: Point) -> Result<sdc::Point> {
+fn from_point(point: &Point) -> Result<sdc::Point> {
     Ok(sdc::Point {
         time: try!(point.gps_time.ok_or(Error::MissingDimension("time".to_string()))),
         range: point.range.unwrap_or_else(|| {
@@ -61,7 +61,7 @@ mod tests {
         let mut source = las::Reader::from_path("data/1.0_1.las").unwrap();
         {
             let mut sink = sdc::Writer::from_path("temp.sdc").unwrap();
-            for point in source.source_to_end(100).unwrap() {
+            for point in &source.source_to_end(100).unwrap() {
                 sink.sink(point).unwrap();
             }
         }

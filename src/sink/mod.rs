@@ -37,9 +37,7 @@ where P: 'static + AsRef<Path> + AsRef<OsStr>
 /// A sink is a place where points go. Mabye they're written to disk. Maybe not.
 pub trait Sink {
     /// Sink a single point into this sink.
-    ///
-    /// TODO make point a reference
-    fn sink(&mut self, point: Point) -> Result<()>;
+    fn sink(&mut self, point: &Point) -> Result<()>;
 
     /// Close a sink, probably writing its points out or something.
     fn close_sink(self: Box<Self>) -> Result<()>;

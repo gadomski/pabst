@@ -12,7 +12,7 @@ use point::{Point, ScanDirection};
 use sink::{FileSink, Sink};
 
 impl<W: Write + Seek> Sink for las::writer::OpenWriter<W> {
-    fn sink(&mut self, point: Point) -> Result<()> {
+    fn sink(&mut self, point: &Point) -> Result<()> {
         try!(self.write_point(&try!(from_point(point))));
         Ok(())
     }
@@ -22,7 +22,7 @@ impl<W: Write + Seek> Sink for las::writer::OpenWriter<W> {
     }
 }
 
-fn from_point(point: Point) -> Result<las::Point> {
+fn from_point(point: &Point) -> Result<las::Point> {
     Ok(las::Point {
         x: point.x,
         y: point.y,
@@ -110,7 +110,7 @@ mod tests {
     fn read_write_las() {
         let mut source = las::Reader::from_path("data/1.0_0.las").unwrap();
         let mut sink = las::Writer::from_path("read_write_las.las").unwrap().open().unwrap();
-        for point in source.source_to_end(100).unwrap() {
+        for point in &source.source_to_end(100).unwrap() {
             sink.sink(point).unwrap()
         }
         let _ = sink.close().unwrap();
@@ -125,7 +125,7 @@ mod tests {
     fn source_and_sink() {
         let mut source = open_file_source("data/1.0_0.las", None).unwrap();
         let mut sink = open_file_sink("source_and_sink.las", None).unwrap();
-        for point in source.source_to_end(100).unwrap() {
+        for point in &source.source_to_end(100).unwrap() {
             sink.sink(point).unwrap();
         }
         sink.close_sink().unwrap();
