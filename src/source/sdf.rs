@@ -55,6 +55,8 @@ impl From<sdf::convert::Point> for Point {
             number_of_returns: Some(point.num_target as usize),
             facet_number: Some(point.facet as u8),
             high_channel: Some(point.high_channel),
+            // TODO this probably isn't always gps time
+            gps_time: Some(point.time),
             ..Default::default()
         }
     }
