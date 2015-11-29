@@ -14,7 +14,7 @@ use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
 
-use las::Stream as LasStream;
+use las::Reader as LasReader;
 #[cfg(feature = "rxp-source")]
 use rivlib::Stream as RxpStream;
 use toml;
@@ -35,7 +35,7 @@ pub fn open_file_source<P>(path: P, options: Option<&toml::Table>) -> Result<Box
     where P: AsRef<Path> + AsRef<OsStr>
 {
     match Path::new(&path).extension().and_then(|e| e.to_str()) {
-        Some("las") => LasStream::<BufReader<File>>::open_file_source(path, options),
+        Some("las") => LasReader::<BufReader<File>>::open_file_source(path, options),
         #[cfg(feature = "rxp-source")]
         Some("rxp") => RxpStream::open_file_source(path, options),
         _ => Err(Error::UndefinedSource),

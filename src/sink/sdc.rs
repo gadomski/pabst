@@ -15,7 +15,7 @@ impl<W: Write> Sink for sdc::Writer<W> {
         Ok(())
     }
 
-    fn close_sink(&mut self) -> Result<()> {
+    fn close_sink(self: Box<Self>) -> Result<()> {
         Ok(())
     }
 }
@@ -58,7 +58,7 @@ mod tests {
 
     #[test]
     fn sink_las() {
-        let mut source = las::Stream::from_path("data/1.0_1.las").unwrap();
+        let mut source = las::Reader::from_path("data/1.0_1.las").unwrap();
         {
             let mut sink = sdc::Writer::from_path("temp.sdc").unwrap();
             for point in source.source_to_end(100).unwrap() {

@@ -11,11 +11,11 @@ use error::Error;
 use point::{Intensity, Point, ScanDirection};
 use source::{FileSource, Source};
 
-impl<R: Read + Seek> Source for las::Stream<R> {
+impl<R: Read + Seek> Source for las::Reader<R> {
     fn source(&mut self, want: usize) -> Result<Option<Vec<Point>>> {
         let mut points = Vec::with_capacity(want);
         for _ in 0..want {
-            match try!(self.next_point()) {
+            match try!(self.read_point()) {
                 Some(point) => points.push(Point::from(point)),
                 None => {
                     if points.is_empty() {
@@ -30,7 +30,7 @@ impl<R: Read + Seek> Source for las::Stream<R> {
     }
 }
 
-impl<R: Read + Seek> FileSource for las::Stream<R> {
+impl<R: Read + Seek> FileSource for las::Reader<R> {
     fn open_file_source<P: AsRef<Path>>(path: P,
                                         options: Option<&toml::Table>)
                                         -> Result<Box<Source>> {
@@ -39,7 +39,7 @@ impl<R: Read + Seek> FileSource for las::Stream<R> {
                                              time"
                                                 .to_string()));
         }
-        let source = try!(las::Stream::from_path(path));
+        let source = try!(las::Reader::from_path(path));
         Ok(Box::new(source))
     }
 }

@@ -1,5 +1,6 @@
 //! Sink points into a las file.
 
+use std::io::{Write, Seek};
 use std::path::Path;
 
 use las;
@@ -10,14 +11,14 @@ use error::Error;
 use point::{Point, ScanDirection};
 use sink::{FileSink, Sink};
 
-impl<P: AsRef<Path>> Sink for las::Writer<P> {
+impl<W: Write + Seek> Sink for las::writer::OpenWriter<W> {
     fn sink(&mut self, point: Point) -> Result<()> {
-        self.write_point(try!(from_point(point)));
+        try!(self.write_point(&try!(from_point(point))));
         Ok(())
     }
 
-    fn close_sink(&mut self) -> Result<()> {
-        self.close().map_err(|e| Error::from(e))
+    fn close_sink(self: Box<Self>) -> Result<()> {
+        self.close().map_err(|e| Error::from(e)).map(|_| ())
     }
 }
 
@@ -50,9 +51,9 @@ fn from_point(point: Point) -> Result<las::Point> {
     })
 }
 
-impl<P: 'static + AsRef<Path>> FileSink<P> for las::Writer<P> {
-    fn open_file_sink(path: P, options: Option<&toml::Table>) -> Result<Box<Sink>> {
-        let mut writer = las::Writer::from_path(path);
+impl<W: Write + Seek> FileSink for las::Writer<W> {
+    fn open_file_sink<P: AsRef<Path>>(path: P, options: Option<&toml::Table>) -> Result<Box<Sink>> {
+        let mut writer = try!(las::Writer::from_path(path));
         if let Some(options) = options {
             for (key, val) in options.iter() {
                 match key.to_lowercase().as_ref() {
@@ -92,7 +93,7 @@ impl<P: 'static + AsRef<Path>> FileSink<P> for las::Writer<P> {
             }
         }
 
-        Ok(Box::new(writer))
+        Ok(Box::new(try!(writer.open())))
     }
 }
 
@@ -107,14 +108,14 @@ mod tests {
 
     #[test]
     fn read_write_las() {
-        let mut source = las::Stream::from_path("data/1.0_0.las").unwrap();
-        let mut sink = las::Writer::from_path("read_write_las.las");
+        let mut source = las::Reader::from_path("data/1.0_0.las").unwrap();
+        let mut sink = las::Writer::from_path("read_write_las.las").unwrap().open().unwrap();
         for point in source.source_to_end(100).unwrap() {
             sink.sink(point).unwrap()
         }
-        sink.close().unwrap();
+        let _ = sink.close().unwrap();
 
-        let mut source = las::Stream::from_path("read_write_las.las").unwrap();
+        let mut source = las::Reader::from_path("read_write_las.las").unwrap();
         let points = source.source_to_end(100).unwrap();
         assert_eq!(1, points.len());
         remove_file("read_write_las.las").unwrap();
@@ -129,7 +130,7 @@ mod tests {
         }
         sink.close_sink().unwrap();
 
-        let mut source = las::Stream::from_path("source_and_sink.las").unwrap();
+        let mut source = las::Reader::from_path("source_and_sink.las").unwrap();
         let points = source.source_to_end(100).unwrap();
         assert_eq!(1, points.len());
         remove_file("source_and_sink.las").unwrap();

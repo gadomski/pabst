@@ -4,6 +4,8 @@ pub mod las;
 pub mod sdc;
 
 use std::ffi::OsStr;
+use std::fs::File;
+use std::io::BufWriter;
 use std::path::Path;
 
 use las::Writer as LasWriter;
@@ -22,10 +24,10 @@ use point::Point;
 /// let sink = open_file_sink("temp.las", None).unwrap();
 /// ```
 pub fn open_file_sink<P>(path: P, options: Option<&toml::Table>) -> Result<Box<Sink>>
-    where P: 'static + AsRef<Path> + AsRef<OsStr>
+where P: 'static + AsRef<Path> + AsRef<OsStr>
 {
     match Path::new(&path).extension().and_then(|e| e.to_str()) {
-        Some("las") => LasWriter::open_file_sink(path, options),
+        Some("las") => LasWriter::<BufWriter<File>>::open_file_sink(path, options),
         _ => Err(Error::UndefinedSink),
     }
 }
@@ -35,14 +37,16 @@ pub fn open_file_sink<P>(path: P, options: Option<&toml::Table>) -> Result<Box<S
 /// A sink is a place where points go. Mabye they're written to disk. Maybe not.
 pub trait Sink {
     /// Sink a single point into this sink.
+    ///
+    /// TODO make point a reference
     fn sink(&mut self, point: Point) -> Result<()>;
 
     /// Close a sink, probably writing its points out or something.
-    fn close_sink(&mut self) -> Result<()>;
+    fn close_sink(self: Box<Self>) -> Result<()>;
 }
 
 /// A sink that puts points into a path.
-pub trait FileSink<P: AsRef<Path>> {
+pub trait FileSink {
     /// Open a new file sink.
-    fn open_file_sink(path: P, options: Option<&toml::Table>) -> Result<Box<Sink>> where Self: Sized;
+    fn open_file_sink<P: AsRef<Path>>(path: P, options: Option<&toml::Table>) -> Result<Box<Sink>> where Self: Sized;
 }
