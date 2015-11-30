@@ -9,11 +9,25 @@ use std::io::BufWriter;
 use std::path::Path;
 
 use las::Writer as LasWriter;
+use rustc_serialize::Decodable;
 use toml;
 
 use Result;
 use error::Error;
 use point::Point;
+
+enum SinkType {
+    Las,
+}
+
+impl SinkType {
+    fn from_osstr_ref<S: AsRef<OsStr>>(s: S) -> Result<SinkType> {
+        match Path::new(&s).extension().and_then(|e| e.to_str()) {
+            Some("las") => Ok(SinkType::Las),
+            Some(_) | None => Err(Error::UnregisteredFileExtension(OsStr::new(&s).to_os_string())),
+        }
+    }
+}
 
 /// Opens a file sink with the given options
 ///
@@ -25,12 +39,18 @@ use point::Point;
 /// let sink = open_file_sink("temp.las", None).unwrap();
 /// # remove_file("temp.las").unwrap();
 /// ```
-pub fn open_file_sink<P>(path: P, options: Option<&toml::Table>) -> Result<Box<Sink>>
-where P: 'static + AsRef<Path> + AsRef<OsStr>
+pub fn open_file_sink<P>(path: P, config: Option<toml::Value>) -> Result<Box<Sink>>
+where P: AsRef<Path> + AsRef<OsStr>
 {
-    match Path::new(&path).extension().and_then(|e| e.to_str()) {
-        Some("las") => LasWriter::<BufWriter<File>>::open_file_sink(path, options),
-        _ => Err(Error::UndefinedSink),
+    let decoder = config.map(|c| toml::Decoder::new(c));
+    match try!(SinkType::from_osstr_ref(&path)) {
+        SinkType::Las =>  {
+            let config = match decoder {
+                Some(mut decoder) => Some(try!(<LasWriter<BufWriter<File>> as FileSink>::Config::decode(&mut decoder))),
+                None => None,
+            };
+            LasWriter::<BufWriter<File>>::open_file_sink(path, config)
+        }
     }
 }
 
@@ -47,6 +67,9 @@ pub trait Sink {
 
 /// A sink that puts points into a path.
 pub trait FileSink {
+    /// Decodable configuration.
+    type Config: Decodable;
+
     /// Open a new file sink.
-    fn open_file_sink<P: AsRef<Path>>(path: P, options: Option<&toml::Table>) -> Result<Box<Sink>> where Self: Sized;
+    fn open_file_sink<P: AsRef<Path>>(path: P, options: Option<Self::Config>) -> Result<Box<Sink>> where Self: Sized;
 }

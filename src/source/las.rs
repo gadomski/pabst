@@ -4,7 +4,6 @@ use std::io::{Read, Seek};
 use std::path::Path;
 
 use las;
-use toml;
 
 use Result;
 use error::Error;
@@ -35,18 +34,20 @@ impl<R: Read + Seek> Source for las::Reader<R> {
 }
 
 impl<R: Read + Seek> FileSource for las::Reader<R> {
-    fn open_file_source<P: AsRef<Path>>(path: P,
-                                        options: Option<&toml::Table>)
-                                        -> Result<Box<Source>> {
-        if options.is_some() {
-            return Err(Error::InvalidOption("las source does not support any options at this \
-                                             time"
+    type Config = LasConfig;
+    fn open_file_source<P>(path: P, config: Option<LasConfig>) -> Result<Box<Source>> where P: AsRef<Path> {
+        if config.is_some() {
+            return Err(Error::Configuration("The las source does not support any configuration \
+                                             options"
                                                 .to_string()));
         }
-        let source = try!(las::Reader::from_path(path));
-        Ok(Box::new(source))
+        Ok(Box::new(try!(las::Reader::from_path(path))))
     }
 }
+
+/// Decodable configuration object.
+#[derive(Clone, Copy, Debug, RustcDecodable)]
+pub struct LasConfig;
 
 impl From<las::Point> for Point {
     fn from(point: las::Point) -> Point {

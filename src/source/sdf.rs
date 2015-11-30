@@ -8,7 +8,6 @@ use std::path::Path;
 use std::u32;
 
 use sdf;
-use toml;
 
 use Result;
 use error::Error;
@@ -85,11 +84,12 @@ impl From<sdf::convert::Point> for Point {
 }
 
 impl FileSource for sdf::File {
-    fn open_file_source<P>(path: P, options: Option<&toml::Table>) -> Result<Box<Source>>
+    type Config = SdfConfig;
+    fn open_file_source<P>(path: P, config: Option<Self::Config>) -> Result<Box<Source>>
         where P: AsRef<Path> + AsRef<OsStr>
     {
-        if options.is_some() {
-            return Err(Error::InvalidOption("sdf source does not suppport any options at this \
+        if config.is_some() {
+            return Err(Error::Configuration("sdf source does not suppport any options at this \
                                              time"
                                                 .to_string()));
         }
@@ -97,6 +97,10 @@ impl FileSource for sdf::File {
         Ok(Box::new(try!(sdf::File::open(path.to_str().unwrap()))))
     }
 }
+
+/// Our decodable configuration.
+#[derive(Clone, Copy, Debug, RustcDecodable)]
+pub struct SdfConfig;
 
 #[cfg(test)]
 mod tests {

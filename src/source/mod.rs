@@ -17,6 +17,7 @@ use std::path::Path;
 use las::Reader as LasReader;
 #[cfg(feature = "rxp-source")]
 use rivlib::Stream as RxpStream;
+use rustc_serialize::Decodable;
 #[cfg(feature = "sdf-source")]
 use sdf::File as SdfFile;
 use toml;
@@ -24,6 +25,27 @@ use toml;
 use Result;
 use error::Error;
 use point::Point;
+
+enum SourceType {
+    Las,
+    #[cfg(feature = "sdf-source")]
+    Sdf,
+    #[cfg(feature = "rxp-source")]
+    Rxp,
+}
+
+impl SourceType {
+    fn from_osstr_ref<S: AsRef<OsStr>>(s: S) -> Result<SourceType> {
+        match Path::new(&s).extension().and_then(|e| e.to_str()) {
+            Some("las") => Ok(SourceType::Las),
+            #[cfg(feature = "sdf-source")]
+            Some("sdf") => Ok(SourceType::Sdf),
+            #[cfg(feature = "rxp-source")]
+            Some("rxp") => Ok(SourceType::Rxp),
+            Some(_) | None => Err(Error::UnregisteredFileExtension(OsStr::new(&s).to_os_string())),
+        }
+    }
+}
 
 /// Opens a file source with the given options.
 ///
@@ -33,16 +55,33 @@ use point::Point;
 /// use pabst::source::open_file_source;
 /// let source = open_file_source("data/1.0_0.las", None).unwrap();
 /// ```
-pub fn open_file_source<P>(path: P, options: Option<&toml::Table>) -> Result<Box<Source>>
-    where P: AsRef<Path> + AsRef<OsStr>
+pub fn open_file_source<P>(path: P, config: Option<toml::Value>) -> Result<Box<Source>> where P: AsRef<Path> + AsRef<OsStr>
 {
-    match Path::new(&path).extension().and_then(|e| e.to_str()) {
-        Some("las") => LasReader::<BufReader<File>>::open_file_source(path, options),
-        #[cfg(feature = "rxp-source")]
-        Some("rxp") => RxpStream::open_file_source(path, options),
+    let decoder = config.map(|c| toml::Decoder::new(c));
+    match try!(SourceType::from_osstr_ref(&path)) {
+        SourceType::Las => {
+            let config = match decoder {
+                Some(mut decoder) => Some(try!(<LasReader<BufReader<File>> as FileSource>::Config::decode(&mut decoder))),
+                None => None,
+            };
+            LasReader::<BufReader<File>>::open_file_source(path, config)
+        }
         #[cfg(feature = "sdf-source")]
-        Some("sdf") => SdfFile::open_file_source(path, options),
-        _ => Err(Error::UndefinedSource),
+        SourceType::Sdf => {
+            let config = match decoder {
+                Some(mut decoder) => Some(try!(<SdfFile as FileSource>::Config::decode(&mut decoder))),
+                None => None,
+            };
+            SdfFile::open_file_source(path, config)
+        }
+        #[cfg(feature = "rxp-source")]
+        SourceType::Rxp => {
+            let config = match decoder {
+                Some(mut decoder) => Some(try!(<RxpStream as FileSource>::Config::decode(&mut decoder))),
+                None => None,
+            };
+            RxpStream::open_file_source(path, config)
+        }
     }
 }
 
@@ -68,7 +107,7 @@ pub trait Source {
         }
     }
 
-    /// Returns the total number of points in this source.
+    /// Returns a guess at total number of points in this source.
     ///
     /// If possible, sources should prefer to report point totals from headers, etc, rather than
     /// reading all of the points. For this reason, users of this method should be aware that it
@@ -80,8 +119,9 @@ pub trait Source {
 
 /// A point source that can be opened from a path.
 pub trait FileSource {
-    /// Open this file source for the given path with the given options.
-    fn open_file_source<P>(path: P, options: Option<&toml::Table>) -> Result<Box<Source>>
-        where Self: Sized,
-              P: AsRef<Path> + AsRef<OsStr>;
+    /// Decodable configuration object.
+    type Config: Decodable;
+
+    /// Opens a file source with the given config.
+    fn open_file_source<P>(path: P, config: Option<Self::Config>) -> Result<Box<Source>> where P: AsRef<Path> + AsRef<OsStr>;
 }

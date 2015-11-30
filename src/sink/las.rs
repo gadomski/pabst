@@ -4,7 +4,6 @@ use std::io::{Write, Seek};
 use std::path::Path;
 
 use las;
-use toml;
 
 use Result;
 use error::Error;
@@ -52,66 +51,50 @@ fn from_point(point: &Point) -> Result<las::Point> {
 }
 
 impl<W: Write + Seek> FileSink for las::Writer<W> {
-    fn open_file_sink<P: AsRef<Path>>(path: P, options: Option<&toml::Table>) -> Result<Box<Sink>> {
+    type Config = LasConfig;
+
+    fn open_file_sink<P: AsRef<Path>>(path: P, config: Option<LasConfig>) -> Result<Box<Sink>> {
         let mut writer = try!(las::Writer::from_path(path));
-        if let Some(options) = options {
-            for (key, val) in options.iter() {
-                match key.to_lowercase().as_ref() {
-                    "scale-factors" | "scaling" => {
-                        if let &toml::Value::Array(ref array) = val {
-                            if array.len() != 3 {
-                                return Err(Error::InvalidOption("Incorrect number of scale \
-                                                                 factors"
-                                                                    .to_string()));
-                            }
-                            let mut factors = Vec::with_capacity(3);
-                            for value in array {
-                                factors.push(try!(value.as_float()
-                                                       .ok_or(Error::InvalidOption("Unable to \
-                                                                                    parse scale \
-                                                                                    factor as \
-                                                                                    float"
-                                                                                       .to_string()))));
-                            }
-                            writer = writer.scale_factors(factors[0], factors[1], factors[2]);
-                        } else {
-                            return Err(Error::InvalidOption("Invalid value for scale factor"
-                                                                .to_string()));
-                        }
-                    }
-                    "auto-offset" | "auto-offsets" => writer = writer.auto_offsets(try!(val.as_bool()
-                                                                                        .ok_or(Error::InvalidOption("Unable to \
-                                                                                    parse auto \
-                                                                                    offset as \
-                                                                                    boolean".to_string())))),
-                    "point-format" => {
-                        writer = writer.point_format(
-                            try!(las::PointFormat::from_u8(try!(val.as_integer().ok_or(Error::InvalidOption("Not an int".to_string()))) as u8)))
-                    }
-                    "version" => {
-                        let v: Vec<_> = try!(val.as_str()
-                                                .ok_or(Error::InvalidOption("Version must be a \
-                                                                             string"
-                                                                                .to_string())))
-                                            .split(".")
-                                            .collect();
-                        if v.len() != 2 {
-                            return Err(Error::InvalidOption("Version must only have two parts"
-                                                                .to_string()));
-                        }
-                        writer = writer.version(try!(v[0].parse()), try!(v[1].parse()))
-                    }
-                    _ => {
-                        return Err(Error::InvalidOption(format!("The las sink does not know \
-                                                                 how to handle this option: {}",
-                                                                key)));
-                    }
-                }
+        if let Some(config) = config {
+            if let Some(s) = config.scale_factors {
+                writer = writer.scale_factors(s.x, s.y, s.z);
+            }
+            if let Some(a) = config.auto_offsets {
+                writer = writer.auto_offsets(a);
+            }
+            if let Some(p) = config.point_format {
+                writer = writer.point_format(try!(las::PointFormat::from_u8(p)));
+            }
+            if let Some(v) = config.version {
+                writer = writer.version(v.major, v.minor);
             }
         }
-
         Ok(Box::new(try!(writer.open())))
     }
+}
+
+/// Decodable configuration
+#[derive(Clone, Copy, Debug, RustcDecodable)]
+pub struct LasConfig {
+    scale_factors: Option<ScaleFactors>,
+    auto_offsets: Option<bool>,
+    point_format: Option<u8>,
+    version: Option<Version>,
+}
+
+/// Simple wrapper around x, y, and z scale factors.
+#[derive(Clone, Copy, Debug, RustcDecodable)]
+pub struct ScaleFactors {
+    x: f64,
+    y: f64,
+    z: f64,
+}
+
+/// Simple wrapper around version pair.
+#[derive(Clone, Copy, Debug, RustcDecodable)]
+pub struct Version {
+    major: u8,
+    minor: u8,
 }
 
 #[cfg(test)]
@@ -119,6 +102,7 @@ mod tests {
     use std::fs::remove_file;
 
     use las;
+    use toml;
 
     use sink::{open_file_sink, Sink};
     use source::{open_file_source, Source};
@@ -141,7 +125,16 @@ mod tests {
     #[test]
     fn source_and_sink() {
         let mut source = open_file_source("data/1.0_0.las", None).unwrap();
-        let mut sink = open_file_sink("source_and_sink.las", None).unwrap();
+        let config = toml::Parser::new(r#"
+        scale_factors = { x = 0.01, y = 0.01, z = 0.01 }
+        point_format = 0
+        auto_offsets = true
+        version = { major = 1, minor = 2 }
+        "#)
+                         .parse()
+                         .unwrap();
+        let mut sink = open_file_sink("source_and_sink.las", Some(toml::Value::Table(config)))
+                           .unwrap();
         for point in &source.source_to_end(100).unwrap() {
             sink.sink(point).unwrap();
         }
