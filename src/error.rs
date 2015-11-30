@@ -2,7 +2,7 @@
 
 use std::error;
 use std::fmt;
-use std::num::ParseFloatError;
+use std::num::{ParseFloatError, ParseIntError};
 use std::str::ParseBoolError;
 
 use las;
@@ -23,6 +23,8 @@ pub enum Error {
     Las(las::Error),
     /// A wrapper around `std::str::ParseBoolError`.
     ParseBool(ParseBoolError),
+    /// A wrapper around `std::num::ParseIntError`.
+    ParseInt(ParseIntError),
     /// A wrapper around `std::num::ParseFloatError`.
     ParseFloat(ParseFloatError),
     #[cfg(feature = "rxp-source")]
@@ -46,6 +48,7 @@ impl error::Error for Error {
             Error::MissingDimension(_) => "missing dimension",
             Error::Las(ref err) => err.description(),
             Error::ParseBool(ref err) => err.description(),
+            Error::ParseInt(ref err) => err.description(),
             Error::ParseFloat(ref err) => err.description(),
             #[cfg(feature = "rxp-source")]
             Error::Rxp(ref err) => err.description(),
@@ -61,6 +64,7 @@ impl error::Error for Error {
         match *self {
             Error::Las(ref err) => Some(err),
             Error::ParseBool(ref err) => Some(err),
+            Error::ParseInt(ref err) => Some(err),
             Error::ParseFloat(ref err) => Some(err),
             #[cfg(feature = "rxp-source")]
             Error::Rxp(ref err) => Some(err),
@@ -79,6 +83,7 @@ impl fmt::Display for Error {
             Error::MissingDimension(ref s) => write!(f, "Missing dimension: {}", s),
             Error::Las(ref err) => write!(f, "las error: {}", err),
             Error::ParseBool(ref err) => write!(f, "Parse bool error: {}", err),
+            Error::ParseInt(ref err) => write!(f, "Parse int error: {}", err),
             Error::ParseFloat(ref err) => write!(f, "Parse float error: {}", err),
             #[cfg(feature = "rxp-source")]
             Error::Rxp(ref err) => write!(f, "rxp error: {}", err),
@@ -100,6 +105,12 @@ impl From<las::Error> for Error {
 impl From<ParseBoolError> for Error {
     fn from(err: ParseBoolError) -> Error {
         Error::ParseBool(err)
+    }
+}
+
+impl From<ParseIntError> for Error {
+    fn from(err: ParseIntError) -> Error {
+        Error::ParseInt(err)
     }
 }
 

@@ -80,10 +80,27 @@ impl<W: Write + Seek> FileSink for las::Writer<W> {
                         }
                     }
                     "auto-offset" | "auto-offsets" => writer = writer.auto_offsets(try!(val.as_bool()
-                                                             .ok_or(Error::InvalidOption("Unable to \
+                                                                                        .ok_or(Error::InvalidOption("Unable to \
                                                                                     parse auto \
                                                                                     offset as \
                                                                                     boolean".to_string())))),
+                    "point-format" => {
+                        writer = writer.point_format(
+                            try!(las::PointFormat::from_u8(try!(val.as_integer().ok_or(Error::InvalidOption("Not an int".to_string()))) as u8)))
+                    }
+                    "version" => {
+                        let v: Vec<_> = try!(val.as_str()
+                                                .ok_or(Error::InvalidOption("Version must be a \
+                                                                             string"
+                                                                                .to_string())))
+                                            .split(".")
+                                            .collect();
+                        if v.len() != 2 {
+                            return Err(Error::InvalidOption("Version must only have two parts"
+                                                                .to_string()));
+                        }
+                        writer = writer.version(try!(v[0].parse()), try!(v[1].parse()))
+                    }
                     _ => {
                         return Err(Error::InvalidOption(format!("The las sink does not know \
                                                                  how to handle this option: {}",
