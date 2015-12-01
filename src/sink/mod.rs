@@ -2,6 +2,7 @@
 
 pub mod las;
 pub mod sdc;
+pub mod text;
 
 use std::ffi::OsStr;
 use std::fs::File;
@@ -18,12 +19,14 @@ use point::Point;
 
 enum SinkType {
     Las,
+    Text,
 }
 
 impl SinkType {
     fn from_osstr_ref<S: AsRef<OsStr>>(s: S) -> Result<SinkType> {
         match Path::new(&s).extension().and_then(|e| e.to_str()) {
             Some("las") => Ok(SinkType::Las),
+            Some("txt") => Ok(SinkType::Text),
             Some(_) | None => Err(Error::UnregisteredFileExtension(OsStr::new(&s).to_os_string())),
         }
     }
@@ -55,6 +58,7 @@ where P: AsRef<Path> + AsRef<OsStr>
     let mut decoder = config.map(|c| toml::Decoder::new(c));
     match try!(SinkType::from_osstr_ref(&path)) {
         SinkType::Las =>  LasWriter::<BufWriter<File>>::open_file_sink(path, decode_or_default!(LasWriter<BufWriter<File>>, decoder)),
+        SinkType::Text =>  text::Writer::<BufWriter<File>>::open_file_sink(path, decode_or_default!(text::Writer<BufWriter<File>>, decoder)),
     }
 }
 

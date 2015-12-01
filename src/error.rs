@@ -3,6 +3,7 @@
 use std::error;
 use std::ffi::OsString;
 use std::fmt;
+use std::io;
 use std::num::{ParseFloatError, ParseIntError};
 use std::str::ParseBoolError;
 
@@ -23,6 +24,8 @@ pub enum Error {
     Decode(toml::DecodeError),
     /// A point is missing a dimension that is required by someone else, usually a `Sink`.
     MissingDimension(String),
+    /// Wrapper around `std::io::Error`.
+    Io(io::Error),
     /// A wrapper around a las error.
     Las(las::Error),
     /// A wrapper around `std::str::ParseBoolError`.
@@ -49,6 +52,7 @@ impl error::Error for Error {
             Error::Configuration(_) => "configuration error",
             Error::Decode(ref err) => err.description(),
             Error::MissingDimension(_) => "missing dimension",
+            Error::Io(ref err) => err.description(),
             Error::Las(ref err) => err.description(),
             Error::ParseBool(ref err) => err.description(),
             Error::ParseInt(ref err) => err.description(),
@@ -65,6 +69,7 @@ impl error::Error for Error {
     fn cause(&self) -> Option<&error::Error> {
         match *self {
             Error::Decode(ref err) => Some(err),
+            Error::Io(ref err) => Some(err),
             Error::Las(ref err) => Some(err),
             Error::ParseBool(ref err) => Some(err),
             Error::ParseInt(ref err) => Some(err),
@@ -85,6 +90,7 @@ impl fmt::Display for Error {
             Error::Configuration(ref s) => write!(f, "Configuration error: {}", s),
             Error::Decode(ref err) => write!(f, "Decode error: {}", err),
             Error::MissingDimension(ref s) => write!(f, "Missing dimension: {}", s),
+            Error::Io(ref err) => write!(f, "IO error: {}", err),
             Error::Las(ref err) => write!(f, "las error: {}", err),
             Error::ParseBool(ref err) => write!(f, "Parse bool error: {}", err),
             Error::ParseInt(ref err) => write!(f, "Parse int error: {}", err),
@@ -103,6 +109,12 @@ impl fmt::Display for Error {
 impl From<toml::DecodeError> for Error {
     fn from(err: toml::DecodeError) -> Error {
         Error::Decode(err)
+    }
+}
+
+impl From<io::Error> for Error {
+    fn from(err: io::Error) -> Error {
+        Error::Io(err)
     }
 }
 
