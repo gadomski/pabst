@@ -10,7 +10,7 @@ sdf-source = ["sdf"]
 [dependencies]
 las = { git = "https://github.com/gadomski/las-rs.git" }
 rivlib = { version="0.1", optional = true }
-rustc-serialize = "*"
+rustc-serialize = "0.3"
 sdc = "0.1"
 sdf = { git = "https://github.com/gadomski/sdf-rs.git", optional = true }
 toml = "0.1"
