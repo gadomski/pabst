@@ -85,21 +85,16 @@ impl From<sdf::convert::Point> for Point {
 
 impl FileSource for sdf::File {
     type Config = SdfConfig;
-    fn open_file_source<P>(path: P, config: Option<Self::Config>) -> Result<Box<Source>>
+    fn open_file_source<P>(path: P, _: Self::Config) -> Result<Box<Source>>
         where P: AsRef<Path> + AsRef<OsStr>
     {
-        if config.is_some() {
-            return Err(Error::Configuration("sdf source does not suppport any options at this \
-                                             time"
-                                                .to_string()));
-        }
         let path = OsStr::new(&path);
         Ok(Box::new(try!(sdf::File::open(path.to_str().unwrap()))))
     }
 }
 
 /// Our decodable configuration.
-#[derive(Clone, Copy, Debug, RustcDecodable)]
+#[derive(Clone, Copy, Debug, Default, RustcDecodable)]
 pub struct SdfConfig;
 
 #[cfg(test)]

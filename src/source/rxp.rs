@@ -52,18 +52,25 @@ impl From<rivlib::Point> for Point {
 /// Rxp's decodable configuration object.
 #[derive(Copy, Clone, Debug, RustcDecodable)]
 pub struct RxpConfig {
-    sync_to_pps: Option<bool>,
+    sync_to_pps: bool,
+}
+
+impl Default for RxpConfig {
+    fn default() -> RxpConfig {
+        RxpConfig {
+            sync_to_pps: true,
+        }
+    }
 }
 
 impl FileSource for rivlib::Stream {
     type Config = RxpConfig;
 
-    fn open_file_source<P>(path: P, config: Option<Self::Config>) -> Result<Box<Source>>
+    fn open_file_source<P>(path: P, config: Self::Config) -> Result<Box<Source>>
         where P: AsRef<Path> + AsRef<OsStr>
     {
         let path = OsStr::new(&path).to_str().unwrap();
-        let sync_to_pps = config.map(|c| c.sync_to_pps.unwrap_or(true)).unwrap_or(true);
-        Ok(Box::new(try!(rivlib::Stream::open(path, sync_to_pps))))
+        Ok(Box::new(try!(rivlib::Stream::open(path, config.sync_to_pps))))
     }
 }
 

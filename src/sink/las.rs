@@ -53,21 +53,19 @@ fn from_point(point: &Point) -> Result<las::Point> {
 impl<W: Write + Seek> FileSink for las::Writer<W> {
     type Config = LasConfig;
 
-    fn open_file_sink<P: AsRef<Path>>(path: P, config: Option<LasConfig>) -> Result<Box<Sink>> {
+    fn open_file_sink<P: AsRef<Path>>(path: P, config: LasConfig) -> Result<Box<Sink>> {
         let mut writer = try!(las::Writer::from_path(path));
-        if let Some(config) = config {
-            if let Some(s) = config.scale_factors {
-                writer = writer.scale_factors(s.x, s.y, s.z);
-            }
-            if let Some(a) = config.auto_offsets {
-                writer = writer.auto_offsets(a);
-            }
-            if let Some(p) = config.point_format {
-                writer = writer.point_format(try!(las::PointFormat::from_u8(p)));
-            }
-            if let Some(v) = config.version {
-                writer = writer.version(v.major, v.minor);
-            }
+        if let Some(s) = config.scale_factors {
+            writer = writer.scale_factors(s.x, s.y, s.z);
+        }
+        if let Some(a) = config.auto_offsets {
+            writer = writer.auto_offsets(a);
+        }
+        if let Some(p) = config.point_format {
+            writer = writer.point_format(try!(las::PointFormat::from_u8(p)));
+        }
+        if let Some(v) = config.version {
+            writer = writer.version(v.major, v.minor);
         }
         Ok(Box::new(try!(writer.open())))
     }
@@ -80,6 +78,17 @@ pub struct LasConfig {
     auto_offsets: Option<bool>,
     point_format: Option<u8>,
     version: Option<Version>,
+}
+
+impl Default for LasConfig {
+    fn default() -> LasConfig {
+       LasConfig {
+           auto_offsets: Some(true),
+           point_format: Some(1),
+           version: Some(Version { major: 1, minor: 2}),
+           scale_factors: None,
+       }
+    }
 }
 
 /// Simple wrapper around x, y, and z scale factors.

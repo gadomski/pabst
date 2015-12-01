@@ -31,7 +31,7 @@ enum SourceType {
     #[cfg(feature = "sdf-source")]
     Sdf,
     #[cfg(feature = "rxp-source")]
-    Rxp,
+        Rxp,
 }
 
 impl SourceType {
@@ -47,6 +47,15 @@ impl SourceType {
     }
 }
 
+macro_rules! decode_or_default {
+    ($klass:path, $decoder:expr) => {{
+        match $decoder {
+            Some(ref mut decoder) => try!(<$klass as FileSource>::Config::decode(decoder)),
+            None => Default::default()
+        }
+    }}
+}
+
 /// Opens a file source with the given options.
 ///
 /// # Examples
@@ -57,31 +66,13 @@ impl SourceType {
 /// ```
 pub fn open_file_source<P>(path: P, config: Option<toml::Value>) -> Result<Box<Source>> where P: AsRef<Path> + AsRef<OsStr>
 {
-    let decoder = config.map(|c| toml::Decoder::new(c));
+    let mut decoder = config.map(|c| toml::Decoder::new(c));
     match try!(SourceType::from_osstr_ref(&path)) {
-        SourceType::Las => {
-            let config = match decoder {
-                Some(mut decoder) => Some(try!(<LasReader<BufReader<File>> as FileSource>::Config::decode(&mut decoder))),
-                None => None,
-            };
-            LasReader::<BufReader<File>>::open_file_source(path, config)
-        }
+        SourceType::Las => LasReader::<BufReader<File>>::open_file_source(path, decode_or_default!(LasReader<BufReader<File>>, decoder)),
         #[cfg(feature = "sdf-source")]
-        SourceType::Sdf => {
-            let config = match decoder {
-                Some(mut decoder) => Some(try!(<SdfFile as FileSource>::Config::decode(&mut decoder))),
-                None => None,
-            };
-            SdfFile::open_file_source(path, config)
-        }
+        SourceType::Sdf =>  SdfFile::open_file_source(path, decode_or_default!(SdfFile, decoder)),
         #[cfg(feature = "rxp-source")]
-        SourceType::Rxp => {
-            let config = match decoder {
-                Some(mut decoder) => Some(try!(<RxpStream as FileSource>::Config::decode(&mut decoder))),
-                None => None,
-            };
-            RxpStream::open_file_source(path, config)
-        }
+        SourceType::Rxp => RxpStream::open_file_source(path, decode_or_default!(RxpStream, decoder)),
     }
 }
 
@@ -123,5 +114,5 @@ pub trait FileSource {
     type Config: Decodable;
 
     /// Opens a file source with the given config.
-    fn open_file_source<P>(path: P, config: Option<Self::Config>) -> Result<Box<Source>> where P: AsRef<Path> + AsRef<OsStr>;
+    fn open_file_source<P>(path: P, config: Self::Config) -> Result<Box<Source>> where P: AsRef<Path> + AsRef<OsStr>;
 }

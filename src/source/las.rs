@@ -35,18 +35,13 @@ impl<R: Read + Seek> Source for las::Reader<R> {
 
 impl<R: Read + Seek> FileSource for las::Reader<R> {
     type Config = LasConfig;
-    fn open_file_source<P>(path: P, config: Option<LasConfig>) -> Result<Box<Source>> where P: AsRef<Path> {
-        if config.is_some() {
-            return Err(Error::Configuration("The las source does not support any configuration \
-                                             options"
-                                                .to_string()));
-        }
+    fn open_file_source<P>(path: P, _: LasConfig) -> Result<Box<Source>> where P: AsRef<Path> {
         Ok(Box::new(try!(las::Reader::from_path(path))))
     }
 }
 
 /// Decodable configuration object.
-#[derive(Clone, Copy, Debug, RustcDecodable)]
+#[derive(Clone, Copy, Debug, Default, RustcDecodable)]
 pub struct LasConfig;
 
 impl From<las::Point> for Point {

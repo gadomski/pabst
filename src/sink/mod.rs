@@ -29,6 +29,16 @@ impl SinkType {
     }
 }
 
+macro_rules! decode_or_default {
+    ($klass:path, $decoder:expr) => {{
+        match $decoder {
+            Some(ref mut decoder) => try!(<$klass as FileSink>::Config::decode(decoder)),
+            None => Default::default()
+        }
+    }}
+}
+
+
 /// Opens a file sink with the given options
 ///
 /// # Examples
@@ -42,15 +52,9 @@ impl SinkType {
 pub fn open_file_sink<P>(path: P, config: Option<toml::Value>) -> Result<Box<Sink>>
 where P: AsRef<Path> + AsRef<OsStr>
 {
-    let decoder = config.map(|c| toml::Decoder::new(c));
+    let mut decoder = config.map(|c| toml::Decoder::new(c));
     match try!(SinkType::from_osstr_ref(&path)) {
-        SinkType::Las =>  {
-            let config = match decoder {
-                Some(mut decoder) => Some(try!(<LasWriter<BufWriter<File>> as FileSink>::Config::decode(&mut decoder))),
-                None => None,
-            };
-            LasWriter::<BufWriter<File>>::open_file_sink(path, config)
-        }
+        SinkType::Las =>  LasWriter::<BufWriter<File>>::open_file_sink(path, decode_or_default!(LasWriter<BufWriter<File>>, decoder)),
     }
 }
 
@@ -71,5 +75,5 @@ pub trait FileSink {
     type Config: Decodable;
 
     /// Open a new file sink.
-    fn open_file_sink<P: AsRef<Path>>(path: P, options: Option<Self::Config>) -> Result<Box<Sink>> where Self: Sized;
+    fn open_file_sink<P: AsRef<Path>>(path: P, options: Self::Config) -> Result<Box<Sink>> where Self: Sized;
 }
