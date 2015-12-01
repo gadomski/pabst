@@ -71,6 +71,7 @@ impl From<sdf::convert::Point> for Point {
             x: point.x as f64,
             y: point.y as f64,
             z: point.z as f64,
+            scan_angle: Some(point.theta as f64),
             intensity: Intensity::from_u16(point.peak.amplitude),
             return_number: Some(point.target as usize),
             number_of_returns: Some(point.num_target as usize),
