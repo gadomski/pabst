@@ -11,8 +11,6 @@ extern crate las;
 #[cfg(feature = "rxp-source")]
 extern crate rivlib;
 extern crate sdc;
-#[cfg(feature = "sdf-source")]
-extern crate sdf;
 extern crate rustc_serialize;
 extern crate toml;
 

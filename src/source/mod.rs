@@ -6,8 +6,6 @@ pub mod las;
 pub mod sdc;
 #[cfg(feature = "rxp-source")]
 pub mod rxp;
-#[cfg(feature = "sdf-source")]
-pub mod sdf;
 
 use std::ffi::OsStr;
 use std::fs::File;
@@ -18,8 +16,6 @@ use las::Reader as LasReader;
 #[cfg(feature = "rxp-source")]
 use rivlib::Stream as RxpStream;
 use rustc_serialize::Decodable;
-#[cfg(feature = "sdf-source")]
-use sdf::File as SdfFile;
 use toml;
 
 use Result;
@@ -28,18 +24,14 @@ use point::Point;
 
 enum SourceType {
     Las,
-    #[cfg(feature = "sdf-source")]
-    Sdf,
     #[cfg(feature = "rxp-source")]
-        Rxp,
+    Rxp,
 }
 
 impl SourceType {
     fn from_osstr_ref<S: AsRef<OsStr>>(s: S) -> Result<SourceType> {
         match Path::new(&s).extension().and_then(|e| e.to_str()) {
             Some("las") => Ok(SourceType::Las),
-            #[cfg(feature = "sdf-source")]
-            Some("sdf") => Ok(SourceType::Sdf),
             #[cfg(feature = "rxp-source")]
             Some("rxp") => Ok(SourceType::Rxp),
             Some(_) | None => Err(Error::UnregisteredFileExtension(OsStr::new(&s).to_os_string())),
@@ -69,8 +61,6 @@ pub fn open_file_source<P>(path: P, config: Option<toml::Value>) -> Result<Box<S
     let mut decoder = config.map(|c| toml::Decoder::new(c));
     match try!(SourceType::from_osstr_ref(&path)) {
         SourceType::Las => LasReader::<BufReader<File>>::open_file_source(path, decode_or_default!(LasReader<BufReader<File>>, decoder)),
-        #[cfg(feature = "sdf-source")]
-        SourceType::Sdf =>  SdfFile::open_file_source(path, decode_or_default!(SdfFile, decoder)),
         #[cfg(feature = "rxp-source")]
         SourceType::Rxp => RxpStream::open_file_source(path, decode_or_default!(RxpStream, decoder)),
     }
