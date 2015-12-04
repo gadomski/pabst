@@ -69,6 +69,15 @@ pub trait Sink {
     fn close_sink(self: Box<Self>) -> Result<()>;
 }
 
+impl Sink for Box<Sink> {
+    fn sink(&mut self, point: &Point) -> Result<()> {
+        (**self).sink(point)
+    }
+    fn close_sink(self: Box<Self>) -> Result<()> {
+        (*self).close_sink()
+    }
+}
+
 /// A sink that puts points into a path.
 pub trait FileSink {
     /// Decodable configuration.
