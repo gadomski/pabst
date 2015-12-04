@@ -98,6 +98,16 @@ pub trait Source {
     fn source_len(&mut self) -> Option<usize>;
 }
 
+impl Source for Box<Source> {
+    fn source(&mut self, want: usize) -> Result<Option<Vec<Point>>> {
+        (**self).source(want)
+    }
+
+    fn source_len(&mut self) -> Option<usize> {
+        (**self).source_len()
+    }
+}
+
 /// A point source that can be opened from a path.
 pub trait FileSource {
     /// Decodable configuration object.
