@@ -82,6 +82,11 @@ pub struct Point {
     ///
     /// TODO this field should be turned into a newtype or enum
     pub high_channel: Option<bool>,
+    /// When doing error propagation, it can be useful to carry along a point's partial derivatives
+    /// with respect to each of the fourteen degrees of freedom in the LiDAR georeferencing
+    /// equation. If we have the partials, we can combine them with compoment errors to get final
+    /// propagated error.
+    pub partials: Option<Partials>,
 }
 
 /// The direction that the scanner mirror was moving when the pulse was emitted.
@@ -156,4 +161,31 @@ impl Intensity {
     pub fn as_u16(&self) -> u16 {
         (u16::MAX as f64 * (self.value - self.min) / (self.max - self.min)) as u16
     }
+}
+
+/// A 3x14 collection of partial derivates for the x, y, and z components of a LiDAR point.
+#[derive(Clone, Copy, Debug)]
+pub struct Partials {
+    range: Xyz,
+    scan_angle: Xyz,
+    boresight_roll: Xyz,
+    boresight_pitch: Xyz,
+    boresight_yaw: Xyz,
+    lever_arm_x: Xyz,
+    lever_arm_y: Xyz,
+    lever_arm_z: Xyz,
+    roll: Xyz,
+    pitch: Xyz,
+    yaw: Xyz,
+    gnss_x: Xyz,
+    gnss_y: Xyz,
+    gnss_z: Xyz,
+}
+
+/// A dumb structure of xyz f64s.
+#[derive(Clone, Copy, Debug)]
+pub struct Xyz {
+    x: f64,
+    y: f64,
+    z: f64,
 }
