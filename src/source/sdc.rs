@@ -43,6 +43,11 @@ impl From<sdc::Point> for Point {
             return_number: Some(point.target as usize),
             number_of_returns: Some(point.num_target as usize),
             gps_time: Some(point.time),
+            range: Some(point.range as f64),
+            scan_angle: Some(point.theta as f64),
+            rg_index: Some(point.rg_index as f64),
+            facet_number: Some(point.facet_number),
+            high_channel: Some(point.high_channel),
             ..Default::default()
         }
     }
