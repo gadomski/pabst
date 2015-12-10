@@ -16,6 +16,7 @@ use las::Reader as LasReader;
 #[cfg(feature = "rxp-source")]
 use rivlib::Stream as RxpStream;
 use rustc_serialize::Decodable;
+use sdc::Reader as SdcReader;
 use toml;
 
 use Result;
@@ -26,6 +27,7 @@ enum SourceType {
     Las,
     #[cfg(feature = "rxp-source")]
     Rxp,
+    Sdc,
 }
 
 impl SourceType {
@@ -34,6 +36,7 @@ impl SourceType {
             Some("las") => Ok(SourceType::Las),
             #[cfg(feature = "rxp-source")]
             Some("rxp") => Ok(SourceType::Rxp),
+            Some("sdc") => Ok(SourceType::Sdc),
             Some(_) | None => Err(Error::UnregisteredFileExtension(OsStr::new(&s).to_os_string())),
         }
     }
@@ -63,6 +66,7 @@ pub fn open_file_source<P>(path: P, config: Option<toml::Value>) -> Result<Box<S
         SourceType::Las => LasReader::<BufReader<File>>::open_file_source(path, decode_or_default!(LasReader<BufReader<File>>, decoder)),
         #[cfg(feature = "rxp-source")]
         SourceType::Rxp => RxpStream::open_file_source(path, decode_or_default!(RxpStream, decoder)),
+        SourceType::Sdc => SdcReader::<BufReader<File>>::open_file_source(path, decode_or_default!(SdcReader<BufReader<File>>, decoder)),
     }
 }
 

@@ -1,12 +1,14 @@
 //! Implement source for .sdc, Riegl's simple file-based discrete return format.
 
+use std::ffi::OsStr;
 use std::io::Read;
+use std::path::Path;
 
 use sdc;
 
 use Result;
 use point::{Intensity, Point};
-use source::Source;
+use source::{FileSource, Source};
 
 impl<R: Read> Source for sdc::Reader<R> {
     fn source(&mut self, want: usize) -> Result<Option<Vec<Point>>> {
@@ -46,16 +48,34 @@ impl From<sdc::Point> for Point {
     }
 }
 
+impl<R: Read> FileSource for sdc::Reader<R> {
+    type Config = SdcConfig;
+    fn open_file_source<P>(path: P, _: Self::Config) -> Result<Box<Source>> where P: AsRef<Path> + AsRef<OsStr> {
+        Ok(Box::new(try!(sdc::Reader::from_path(path))))
+    }
+}
+
+/// Configuration structure for an sdc reader.
+#[derive(Clone, Copy, Debug, Default, RustcDecodable)]
+pub struct SdcConfig;
+
 #[cfg(test)]
 mod tests {
 
     use sdc;
 
-    use source::Source;
+    use source::{open_file_source, Source};
 
     #[test]
     fn simple_read_format_5_0() {
         let mut source = sdc::Reader::from_path("data/4-points.sdc").unwrap();
+        let points = source.source_to_end(100).unwrap();
+        assert_eq!(4, points.len());
+    }
+
+    #[test]
+    fn fs() {
+        let mut source = open_file_source("data/4-points.sdc", None).unwrap();
         let points = source.source_to_end(100).unwrap();
         assert_eq!(4, points.len());
     }
