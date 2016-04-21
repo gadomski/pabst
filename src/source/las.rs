@@ -6,7 +6,6 @@ use std::path::Path;
 use las;
 
 use Result;
-use error::Error;
 use point::{Intensity, Point, ScanDirection};
 use source::{FileSource, Source};
 
