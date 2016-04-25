@@ -2,6 +2,11 @@
 name = "pabst"
 version = "0.1.0"
 authors = ["Pete Gadomski <pete.gadomski@gmail.com>"]
+description = "Point ABSTraction library"
+documentation = "http://gadomski.github.io/pabst"
+readme = "README.md"
+keywords = ["lidar", "pointcloud"]
+license = "MIT"
 
 [features]
 rxp-source = ["rivlib"]
